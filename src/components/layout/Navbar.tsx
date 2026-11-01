@@ -143,7 +143,41 @@ export default function Navbar() {
           </div>
 
           {/* Right Action Elements: Role Switcher, Notifications, Theme, User */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+
+            {/* Developer Contact Quick-Pill */}
+            <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 text-[11px] font-semibold text-slate-700 dark:text-slate-200 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+              <span className="text-slate-400 dark:text-slate-500">Dev:</span>
+              <a
+                href="https://tayson202.github.io/portfolio/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-600 dark:text-brand-400 hover:underline"
+              >
+                Youssef Tamer
+              </a>
+              <span className="text-slate-300 dark:text-slate-600">|</span>
+              <a
+                href="https://wa.me/201203598649"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-600 dark:text-emerald-400 hover:opacity-80 transition-opacity"
+                title="WhatsApp: +20 120 359 8649"
+              >
+                WhatsApp
+              </a>
+              <span className="text-slate-300 dark:text-slate-600">|</span>
+              <a
+                href="https://instagram.com/yousseftamer951?xtok=MThsOWU4ZnpoYnBtNQ%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-pink-600 dark:text-pink-400 hover:opacity-80 transition-opacity"
+                title="Instagram: @yousseftamer951"
+              >
+                Instagram
+              </a>
+            </div>
             
             {/* RBAC Role Switcher Badge */}
             <div className="relative">
@@ -363,6 +397,37 @@ export default function Navbar() {
             >
               Teacher Studio
             </Link>
+          </div>
+
+          {/* Developer Contact In Mobile Menu */}
+          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+            <span className="text-slate-500 font-medium">Developer: Youssef Tamer</span>
+            <div className="flex items-center gap-2">
+              <a
+                href="https://wa.me/201203598649"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold text-[11px]"
+              >
+                WhatsApp
+              </a>
+              <a
+                href="https://instagram.com/yousseftamer951?xtok=MThsOWU4ZnpoYnBtNQ%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg bg-pink-600 text-white font-semibold text-[11px]"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://tayson202.github.io/portfolio/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg bg-slate-800 text-white font-semibold text-[11px]"
+              >
+                Portfolio
+              </a>
+            </div>
           </div>
         </div>
       )}

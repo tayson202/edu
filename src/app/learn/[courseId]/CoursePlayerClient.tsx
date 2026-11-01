@@ -1698,11 +1698,39 @@ export const workflow = new StateGraph(AgentState);`;
       {/* 6. PLATFORM FOOTER */}
       <footer className="w-full bg-surface-container-low mt-space-xl py-space-lg border-t border-surface-container-high">
         <div className="max-w-7xl mx-auto px-margin flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm">
-          <div>© 2025 EduFlow Technologies Inc. Enterprise Learning &amp; Upskilling.</div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span>© 2026 ULearn Platform. Engineered by</span>
+            <a
+              href="https://tayson202.github.io/portfolio/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-on-surface hover:text-primary underline decoration-primary/40 underline-offset-2 transition-colors"
+            >
+              Youssef Tamer
+            </a>
+            <span className="text-outline">|</span>
+            <a
+              href="https://wa.me/201203598649"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-secondary hover:underline font-semibold"
+            >
+              WhatsApp
+            </a>
+            <span className="text-outline">|</span>
+            <a
+              href="https://instagram.com/yousseftamer951?xtok=MThsOWU4ZnpoYnBtNQ%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-tertiary-fixed hover:underline font-semibold"
+            >
+              Instagram
+            </a>
+          </div>
           <div className="flex items-center gap-space-md font-label-md text-label-md">
-            <a className="hover:text-on-surface transition-colors" href="#">Trust &amp; Security</a>
-            <a className="hover:text-on-surface transition-colors" href="#">Compliance</a>
-            <a className="hover:text-on-surface transition-colors" href="#">System Status</a>
+            <a className="hover:text-on-surface transition-colors" href="https://tayson202.github.io/portfolio/" target="_blank" rel="noopener noreferrer">Portfolio</a>
+            <a className="hover:text-on-surface transition-colors" href="https://www.linkedin.com/in/youssef-tamer-169827248" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a className="hover:text-on-surface transition-colors" href="https://github.com/tayson202" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
         </div>
       </footer>
