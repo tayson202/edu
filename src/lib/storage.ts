@@ -41,13 +41,14 @@ import {
   isValidEmail
 } from './crypto-auth';
 
-const STORAGE_KEY = 'ulearn_state_v1';
+const STORAGE_KEY = 'ulearn_state_v2';
 const CURRENT_USER_KEY = 'ulearn_current_user_id';
 
 export interface AppState {
   users: User[];
   currentUserId: string;
   isAuthenticated: boolean;
+  hasExplicitLogin?: boolean;
   sessionExpiry?: number;
   categories: Category[];
   courses: Course[];
@@ -66,8 +67,9 @@ export interface AppState {
 function getInitialState(): AppState {
   return {
     users: initialUsers,
-    currentUserId: 'usr-student', // default to student for interactive exploration
+    currentUserId: 'usr-student', // default to student for interactive exploration as guest
     isAuthenticated: true,
+    hasExplicitLogin: false,
     categories: initialCategories,
     courses: initialCourses,
     enrollments: initialEnrollments,
@@ -89,6 +91,13 @@ export function loadState(): AppState {
   }
 
   try {
+    // Clear legacy v1 state if present to guarantee initial guest role is Student
+    if (localStorage.getItem('ulearn_state_v1')) {
+      try {
+        localStorage.removeItem('ulearn_state_v1');
+      } catch (e) {}
+    }
+
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
       const state = getInitialState();
@@ -98,7 +107,7 @@ export function loadState(): AppState {
     const parsed = JSON.parse(raw);
     const combinedState: AppState = { ...getInitialState(), ...parsed };
 
-    // Ensure new initial seed users (MEMBER, SELLER, COACH, BRAND) are always available
+    // Ensure seed users are always available
     const existingIds = new Set(combinedState.users.map(u => u.id));
     for (const initUser of initialUsers) {
       if (!existingIds.has(initUser.id)) {
@@ -109,6 +118,14 @@ export function loadState(): AppState {
     // Check session expiration if sessionExpiry exists
     if (combinedState.sessionExpiry && Date.now() > combinedState.sessionExpiry) {
       combinedState.isAuthenticated = false;
+      combinedState.hasExplicitLogin = false;
+      combinedState.currentUserId = 'usr-student';
+    }
+
+    // Default to student guest if the current user is missing or was a legacy default teacher
+    const current = combinedState.users.find(u => u.id === combinedState.currentUserId);
+    if (!current || ((current.id === 'usr-seller' || current.id === 'usr-coach' || current.id === 'usr-teacher-sarah') && !combinedState.hasExplicitLogin)) {
+      combinedState.currentUserId = 'usr-student';
     }
 
     return combinedState;
@@ -134,7 +151,9 @@ export function saveState(state: AppState): void {
 
 export function getCurrentUser(state: AppState): User {
   const user = state.users.find(u => u.id === state.currentUserId);
-  return user || state.users[0];
+  if (user) return user;
+  const defaultStudent = state.users.find(u => u.role === 'STUDENT');
+  return defaultStudent || state.users[0];
 }
 
 export function switchUser(role: UserRole): User {
@@ -269,6 +288,7 @@ export async function registerUser(input: RegisterUserInput): Promise<{ success:
   state.users.push(newUser);
   state.currentUserId = newUser.id;
   state.isAuthenticated = true;
+  state.hasExplicitLogin = true;
   state.sessionExpiry = Date.now() + (24 * 60 * 60 * 1000); // 24h
   saveState(state);
 
@@ -311,6 +331,7 @@ export async function loginWithCredentials(
 
   state.currentUserId = user.id;
   state.isAuthenticated = true;
+  state.hasExplicitLogin = true;
   const expiryDays = rememberMe ? 7 : 1;
   state.sessionExpiry = Date.now() + (expiryDays * 24 * 60 * 60 * 1000);
   saveState(state);
@@ -338,6 +359,7 @@ export function loginUser(email: string, role?: UserRole): { success: boolean; u
   }
   state.currentUserId = user.id;
   state.isAuthenticated = true;
+  state.hasExplicitLogin = true;
   state.sessionExpiry = Date.now() + (24 * 60 * 60 * 1000);
   saveState(state);
   return { success: true, user };
@@ -346,6 +368,8 @@ export function loginUser(email: string, role?: UserRole): { success: boolean; u
 export function logoutUser(): void {
   const state = loadState();
   state.isAuthenticated = false;
+  state.hasExplicitLogin = false;
+  state.currentUserId = 'usr-student';
   state.sessionExpiry = 0;
   saveState(state);
 }
