@@ -302,34 +302,49 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. TEACHER ONBOARDING CALLOUT */}
+      {/* 4. CREATOR & BUSINESS ROLES ONBOARDING */}
       <section className="py-20 bg-gradient-to-tr from-brand-900 via-brand-800 to-indigo-900 text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-brand-200">
                 <Sparkles className="w-3.5 h-3.5" />
-                Join Over 1,200+ Verified Educators
+                Dedicated Portals for Sellers, Coaches &amp; Brands
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-                Turn Your Expertise Into an Autonomous Global Business
+                Turn Your Expertise Into an Autonomous Business
               </h2>
               <p className="text-slate-300 text-sm leading-relaxed max-w-xl">
-                Create unlimited free or paid courses with our drag-and-drop builder, auto-generate quiz question banks with AI, host live video classes, and withdraw your earnings whenever you want.
+                Each role operates with independent tools, authorized permissions, and separate dashboards: <strong>Sellers</strong> manage digital products and orders, <strong>Coaches</strong> host 1-on-1 mentoring sessions, and <strong>Brands</strong> issue certified corporate product lines.
               </p>
-              <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Link
-                  href="/teacher/dashboard"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm bg-white text-slate-950 hover:bg-slate-100 shadow-lg flex items-center justify-center gap-2 transition-all"
+                  href="/dashboard/seller"
+                  className="px-5 py-3 rounded-xl font-bold text-xs bg-emerald-600 hover:bg-emerald-500 text-white shadow-md flex items-center gap-1.5 transition-all"
                 >
-                  <span>Open Teacher Studio</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Seller Studio</span>
                 </Link>
                 <Link
-                  href="/academy/dashboard"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm bg-brand-700/60 hover:bg-brand-700 text-white border border-white/10 transition-colors text-center"
+                  href="/dashboard/coach"
+                  className="px-5 py-3 rounded-xl font-bold text-xs bg-amber-600 hover:bg-amber-500 text-white shadow-md flex items-center gap-1.5 transition-all"
                 >
-                  Register an Organization or Academy
+                  <Video className="w-3.5 h-3.5" />
+                  <span>Coach Portal</span>
+                </Link>
+                <Link
+                  href="/dashboard/brand"
+                  className="px-5 py-3 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-500 text-white shadow-md flex items-center gap-1.5 transition-all"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Brand Dashboard</span>
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-5 py-3 rounded-xl font-bold text-xs bg-white text-slate-900 hover:bg-slate-100 shadow-md flex items-center gap-1.5 transition-all"
+                >
+                  <span>Register Account</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>

@@ -46,17 +46,17 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* For Educators Column */}
+          {/* For Roles & Creators Column */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4">
-              For Instructors
+              Role Portals
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-600 dark:text-slate-400">
-              <li><Link href="/teacher/dashboard" className="hover:text-brand-600 transition-colors">Teacher Studio</Link></li>
-              <li><Link href="/teacher/builder" className="hover:text-brand-600 transition-colors">Course Builder</Link></li>
-              <li><Link href="/teacher/earnings" className="hover:text-brand-600 transition-colors">Earnings & Ledger</Link></li>
-              <li><Link href="/academy/dashboard" className="hover:text-brand-600 transition-colors">Academy Portal</Link></li>
-              <li><Link href="/admin/dashboard" className="hover:text-brand-600 transition-colors">Platform Admin</Link></li>
+              <li><Link href="/dashboard/member" className="hover:text-brand-600 transition-colors">Member Workspace</Link></li>
+              <li><Link href="/dashboard/seller" className="hover:text-brand-600 transition-colors">Seller Studio</Link></li>
+              <li><Link href="/dashboard/coach" className="hover:text-brand-600 transition-colors">Coach Portal</Link></li>
+              <li><Link href="/dashboard/brand" className="hover:text-brand-600 transition-colors">Brand Dashboard</Link></li>
+              <li><Link href="/register" className="hover:text-brand-600 transition-colors font-bold text-brand-600 dark:text-brand-400">+ Register Account</Link></li>
             </ul>
           </div>
 
