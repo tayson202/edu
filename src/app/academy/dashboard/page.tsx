@@ -13,7 +13,8 @@ import {
   Layers, 
   UserPlus, 
   Briefcase,
-  CheckCircle2
+  CheckCircle2,
+  Building2
 } from 'lucide-react';
 import { loadState, getCurrentUser } from '@/lib/storage';
 import { Course } from '@/lib/types';
@@ -103,6 +104,15 @@ export default function AcademyDashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/profile"
+              className="px-3.5 py-2.5 rounded-xl font-bold text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-purple-600 shadow-sm flex items-center gap-1.5 transition-colors"
+              title="Edit Institution Profile & Accreditation"
+            >
+              <Building2 className="w-4 h-4 text-purple-600" />
+              <span>Academy Profile</span>
+            </Link>
+
             <button
               onClick={() => setShowAddModal(true)}
               className="px-4 py-2.5 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-700 text-white shadow-sm flex items-center gap-1.5 transition-all"

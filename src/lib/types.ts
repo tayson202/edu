@@ -8,15 +8,50 @@ export type LessonType = 'VIDEO' | 'TEXT' | 'DOCUMENT' | 'QUIZ';
 export type OrderStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
 export type PayoutStatus = 'REQUESTED' | 'PROCESSING' | 'PAID' | 'REJECTED';
 
+export interface AcademyProfile {
+  id: string;
+  userId: string;
+  academyName: string;
+  headline: string;
+  bio: string;
+  accreditation: string;
+  campusLocation: string;
+  websiteUrl: string;
+  contactEmail: string;
+  establishedYear: number;
+  totalStudents: number;
+  verificationStatus: VerificationStatus;
+}
+
+export interface AdminProfile {
+  id: string;
+  userId: string;
+  department: string;
+  securityClearance: 'LEVEL_1' | 'LEVEL_2' | 'LEVEL_3' | 'ROOT_SYSTEM_ADMIN';
+  emergencyContact: string;
+  auditSignerKey: string;
+  autoApprovePayoutsUnderCents: number;
+  twoFactorEnabled: boolean;
+}
+
 export interface User {
   id: string;
   name: string;
   email: string;
   role: UserRole;
   avatarUrl: string;
+  headline?: string;
+  bio?: string;
+  phone?: string;
+  location?: string;
+  websiteUrl?: string;
   isEmailVerified: boolean;
   isActive: boolean;
   createdAt: string;
+  studentProfile?: StudentProfile;
+  teacherProfile?: TeacherProfile;
+  academyProfile?: AcademyProfile;
+  adminProfile?: AdminProfile;
 }
 
 export interface TeacherProfile {

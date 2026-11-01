@@ -123,6 +123,27 @@ export function switchUser(role: UserRole): User {
   return state.users[0];
 }
 
+export function updateUserProfile(userId: string, updates: Partial<User>): User {
+  const state = loadState();
+  const idx = state.users.findIndex(u => u.id === userId);
+  if (idx !== -1) {
+    state.users[idx] = {
+      ...state.users[idx],
+      ...updates,
+      id: userId,
+    };
+    saveState(state);
+    return state.users[idx];
+  }
+  return state.users[0];
+}
+
+export function resetUserToDefault(userId: string): User {
+  const initial = initialUsers.find(u => u.id === userId);
+  if (!initial) return getCurrentUser(loadState());
+  return updateUserProfile(userId, initial);
+}
+
 // -------------------------------------------------------------
 // COURSE CATALOG & BUILDER
 // -------------------------------------------------------------

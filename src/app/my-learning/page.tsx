@@ -103,6 +103,14 @@ export default function MyLearningPage() {
                 Certificates
               </div>
             </div>
+
+            <Link
+              href="/profile"
+              className="px-3.5 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 shadow-sm flex items-center gap-1.5 transition-colors"
+              title="Edit Scholar Profile & Goals"
+            >
+              <span>Edit Profile</span>
+            </Link>
           </div>
         </div>
 

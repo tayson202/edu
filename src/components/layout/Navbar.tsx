@@ -300,14 +300,21 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* User Avatar */}
-            <div className="flex items-center gap-2 pl-1">
+            {/* User Avatar & Profile Link */}
+            <Link
+              href="/profile"
+              className="flex items-center gap-2 pl-1 group"
+              title="View & Edit Role Profile"
+            >
               <img
                 src={user.avatarUrl}
                 alt={user.name}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-brand-500/20"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-brand-500/20 group-hover:ring-brand-500 transition-all"
               />
-            </div>
+              <span className="hidden xl:inline text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors max-w-[100px] truncate">
+                {user.name.split(' ')[0]}
+              </span>
+            </Link>
 
             {/* Mobile Menu Trigger */}
             <button
@@ -335,6 +342,14 @@ export default function Navbar() {
           </form>
 
           <div className="grid grid-cols-2 gap-2 pt-2">
+            <Link 
+              href="/profile" 
+              onClick={() => setShowMobileMenu(false)}
+              className="col-span-2 p-2.5 rounded-xl bg-brand-50 dark:bg-brand-950/50 text-sm font-bold text-brand-700 dark:text-brand-300 flex items-center gap-2 border border-brand-200 dark:border-brand-800"
+            >
+              <UserIcon className="w-4 h-4 text-brand-600" />
+              <span>Role Profile ({user.role.replace('_', ' ')})</span>
+            </Link>
             <Link 
               href="/courses" 
               onClick={() => setShowMobileMenu(false)}

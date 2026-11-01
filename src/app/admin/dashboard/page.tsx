@@ -14,7 +14,8 @@ import {
   AlertCircle, 
   Activity,
   Layers,
-  Sparkles
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 import { 
   loadState, 
@@ -88,9 +89,19 @@ export default function AdminDashboardPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">System Status: Optimal</span>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/profile"
+              className="px-3.5 py-2 rounded-xl font-bold text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-rose-600 shadow-sm flex items-center gap-1.5 transition-colors"
+              title="Edit Admin Profile & Governance Settings"
+            >
+              <ShieldAlert className="w-4 h-4 text-rose-600" />
+              <span>Admin Governance Profile</span>
+            </Link>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/40">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300">System: Optimal</span>
+            </div>
           </div>
         </div>
 
