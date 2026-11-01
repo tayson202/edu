@@ -24,7 +24,8 @@ import {
   UserCheck,
   ArrowRight,
   Moon,
-  Sun
+  Sun,
+  Building2
 } from 'lucide-react';
 import { loadState, getCurrentUser, logoutUser, isUserAuthenticated, getUserRoleDashboard } from '@/lib/storage';
 import { UserRole } from '@/lib/types';

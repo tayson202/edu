@@ -416,9 +416,10 @@ export function getUserRoleDashboard(role: UserRole): string {
  */
 export function canAccessDashboard(
   userRole: UserRole, 
-  targetDashboard: 'STUDENT' | 'TEACHER' | 'ACADEMY' | 'ADMIN' | 'MEMBER' | 'SELLER' | 'COACH' | 'BRAND'
+  targetDashboard: UserRole
 ): boolean {
   if (userRole === 'ADMIN') return true; // Platform Administrator can inspect all dashboards
+  if (targetDashboard === 'ADMIN') return false; // Non-admin cannot access admin dashboard
   
   if (targetDashboard === 'STUDENT' || targetDashboard === 'MEMBER') {
     return userRole === 'STUDENT' || userRole === 'MEMBER';
@@ -428,9 +429,6 @@ export function canAccessDashboard(
   }
   if (targetDashboard === 'ACADEMY' || targetDashboard === 'ACADEMY_ADMIN' || targetDashboard === 'BRAND') {
     return userRole === 'ACADEMY' || userRole === 'ACADEMY_ADMIN' || userRole === 'BRAND';
-  }
-  if (targetDashboard === 'ADMIN') {
-    return userRole === 'ADMIN';
   }
   return false;
 }

@@ -325,7 +325,6 @@ export default function AcademyDashboardPage() {
       )}
 
       </div>
-      </div>
     </ProtectedRoute>
   );
 }
