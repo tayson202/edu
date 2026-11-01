@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_blank" name="shell-type"/><title>EduFlow Checkout</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-surface-variant": "#464555", "on-surface": "#131a33", "on-tertiary-fixed-variant": "#653e00", "tertiary-container": "#885500", "on-secondary-fixed-variant": "#005236", "on-tertiary-container": "#ffd4a4", "inverse-on-surface": "#eff0ff", "background": "#faf8ff", "surface-variant": "#dbe1ff", "surface-tint": "#4d44e3", "surface-container-highest": "#dbe1ff", "on-tertiary-fixed": "#2a1700", "on-tertiary": "#ffffff", "surface-container-high": "#e3e7ff", "on-primary": "#ffffff", "on-secondary-container": "#00714d", "inverse-primary": "#c3c0ff", "tertiary": "#684000", "on-primary-fixed": "#0f0069", "error": "#ba1a1a", "inverse-surface": "#282f49", "secondary-fixed": "#6ffbbe", "surface-container": "#ebedff", "secondary-container": "#6cf8bb", "on-secondary-fixed": "#002113", "tertiary-fixed": "#ffddb8", "primary-container": "#4f46e5", "on-primary-fixed-variant": "#3323cc", "secondary": "#006c49", "outline": "#777587", "surface-container-lowest": "#ffffff", "outline-variant": "#c7c4d8", "surface": "#faf8ff", "on-background": "#131a33", "surface-dim": "#d2d9fa", "on-error": "#ffffff", "primary": "#3525cd", "tertiary-fixed-dim": "#ffb95f", "secondary-fixed-dim": "#4edea3", "on-secondary": "#ffffff", "surface-container-low": "#f3f3ff", "primary-fixed": "#e2dfff", "primary-fixed-dim": "#c3c0ff", "surface-bright": "#faf8ff", "error-container": "#ffdad6", "on-error-container": "#93000a", "on-primary-container": "#dad7ff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xs": "0.25rem", "margin-mobile": "1rem", "space-lg": "1.5rem", "space-xl": "2.5rem", "gutter": "1.5rem", "space-sm": "0.5rem", "space-md": "1rem", "margin": "2rem", "gutter-mobile": "1rem" }, fontFamily: { "body-sm": ["Inter"], "label-md": ["Plus Jakarta Sans"], "title-md": ["Inter"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "display-hero": ["Plus Jakarta Sans"], "display-hero-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-md": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-sm": ["Plus Jakarta Sans"] }, fontSize: { "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["13px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }], "title-md": ["16px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "700" }], "headline-lg-mobile": ["26px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "700" }], "display-hero": ["48px", { lineHeight: "56px", letterSpacing: "-0.025em", fontWeight: "800" }], "display-hero-mobile": ["34px", { lineHeight: "42px", letterSpacing: "-0.02em", fontWeight: "800" }], "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }], "body-md": ["15px", { lineHeight: "24px", fontWeight: "400" }], "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }], "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }], "headline-sm": ["20px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }] } } } };</script></head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen relative"><div class="fixed inset-0 z-40 bg-inverse-surface/60 backdrop-blur-md flex items-center justify-center p-gutter-mobile md:p-gutter"><div class="relative w-full max-w-2xl bg-surface-container-lowest rounded-xl shadow-[0_20px_25px_-5px_rgba(11,19,43,0.1),0_8px_10px_-6px_rgba(11,19,43,0.04)] overflow-hidden flex flex-col max-h-[921px]"><header class="px-space-lg pt-space-lg pb-space-md bg-surface-container-low flex flex-col gap-space-sm"><div class="flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[20px]">school</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">EduFlow</span><span class="inline-flex items-center gap-space-xs px-space-sm py-space-xs rounded-full bg-secondary-container text-on-secondary-fixed text-label-sm font-label-sm font-semibold"><span class="material-symbols-outlined text-[14px]">verified_user</span>256-Bit Secure</span></div><button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">close</span></button></div><div class="flex items-center justify-between pt-space-sm"><div class="flex items-center gap-space-xs"><div class="w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-sm text-label-sm">1</div><span class="font-label-md text-label-md text-on-surface">Review</span></div><div class="h-0.5 flex-1 mx-space-sm bg-surface-container-high"></div><div class="flex items-center gap-space-xs"><div class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-label-sm text-label-sm">2</div><span class="font-label-md text-label-md text-on-surface-variant">Payment</span></div><div class="h-0.5 flex-1 mx-space-sm bg-surface-container-high"></div><div class="flex items-center gap-space-xs"><div class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-label-sm text-label-sm">3</div><span class="font-label-md text-label-md text-on-surface-variant">Confirmation</span></div></div></header><main class="flex-1 overflow-y-auto px-space-lg py-space-lg bg-surface-container-lowest"><div class="flex flex-col w-full">
+<div class="relative w-full flex flex-col gap-space-lg">
+<!-- Hero Celebration Banner with Ambient Aura -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-space-lg shadow-sm">
+<div class="absolute -right-12 -top-12 w-64 h-64 rounded-full bg-secondary-container/30 blur-3xl pointer-events-none"></div>
+<div class="absolute right-36 -bottom-10 w-48 h-48 rounded-full bg-primary-fixed/40 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="relative flex-shrink-0 w-14 h-14 rounded-xl bg-secondary flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-on-secondary text-[32px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="absolute -bottom-1 -right-1 flex h-4 w-4">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-4 w-4 bg-secondary-container"></span>
+</span>
+</div>
+<div class="flex flex-col gap-space-xs min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed text-label-sm font-label-sm uppercase tracking-wider">
+                Enrollment Verified
+              </span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">
+                Order #EDF-89241
+              </span>
+<span class="text-outline-variant">•</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">
+                Stripe Ref: ch_3P7a9xL2
+              </span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight">
+              You're enrolled in Full-Stack AI Agents in TypeScript &amp; Python!
+            </h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-2xl">
+              Your GPU Cloud Sandbox is live, Spark AI Copilot has been provisioned, and your corporate invoice has been dispatched to <span class="font-semibold text-on-surface">sarah.jenkins@acme.corp</span>.
+            </p>
+</div>
+</div>
+<!-- Metric Badges Group -->
+<div class="flex md:flex-col items-end justify-start gap-space-xs flex-shrink-0">
+<div class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">group</span>
+<span class="font-label-md text-label-md text-on-surface">Cohort 14 (Winter 2025)</span>
+</div>
+<div class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[18px]">badge</span>
+<span class="font-label-md text-label-md text-on-surface">1 Reserved Enterprise Seat</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stepper Status Overview within Content Area -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm">
+<div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low">
+<div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-on-secondary">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Step 1</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Plan &amp; Syllabus Review</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low">
+<div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-on-secondary">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Step 2</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Corporate Billing Settled</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-primary-container text-on-primary shadow-sm">
+<div class="w-7 h-7 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider">Step 3 Active</span>
+<span class="font-label-md text-label-md text-on-primary truncate">Sandbox &amp; Community Ready</span>
+</div>
+</div>
+</div>
+<!-- Main Two-Column Success Architecture -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: Immediate Onboarding Checklist & Sandbox Warmup -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">rocket_launch</span>
+              Quick Launch &amp; Sandbox Warm-up
+            </h2>
+<span class="font-label-sm text-label-sm px-space-sm py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium">
+              ~3 mins setup
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Complete these onboarding milestones to synchronize your GPU environment before the initial cohort lecture.
+          </p>
+</div>
+<!-- Checklist Bento Stack -->
+<div class="flex flex-col gap-space-sm">
+<!-- Step 1: Sandbox Auto Provisioned -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-space-md shadow-sm transition-all hover:bg-surface-container">
+<div class="flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-title-md text-title-md text-on-surface">Dedicated GPU Cloud Sandbox</span>
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Live Pod #us-east-4
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                  Container provisioned with <span class="font-mono text-on-surface">Node 20</span>, <span class="font-mono text-on-surface">Python 3.11</span>, and pre-compiled <span class="font-mono text-on-surface">LangGraph v0.2.14</span> weights.
+                </p>
+<div class="mt-space-sm flex items-center gap-space-sm text-label-sm font-label-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">memory</span> vLLM Server: Active
+                  </span>
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">token</span> Spark Copilot: 2.5M tokens
+                  </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: Cohort Community Access -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-space-md shadow-sm transition-all hover:bg-surface-container">
+<div class="flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-label-md text-label-md flex-shrink-0 mt-0.5">
+                2
+              </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-title-md text-title-md text-on-surface">Join Cohort Slack &amp; Discord Channels</span>
+<span class="px-space-sm py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed text-label-sm font-label-sm">
+                    1,840 Peers Online
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                  Access direct Q&amp;A threads with Dr. Elena Vance, Teaching Assistants, and regional engineering study groups.
+                </p>
+<div class="mt-space-sm flex items-center gap-space-xs flex-wrap">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">chat</span>
+<span>Join #cohort-14-announcements</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span>Invite Discord Bot</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 3: Office Hours Calendar Sync -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-space-md shadow-sm transition-all hover:bg-surface-container">
+<div class="flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-label-md text-label-md flex-shrink-0 mt-0.5">
+                3
+              </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-title-md text-title-md text-on-surface">Add Live Clinic Office Hours</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Thursdays • 1:00 PM EST</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                  Weekly live code reviews and architectural breakdown with guest LLM researchers.
+                </p>
+<!-- Quick Calendar Sync Pills -->
+<div class="mt-space-sm flex items-center gap-space-xs flex-wrap">
+<button class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-primary">calendar_month</span> Google Cal
+                  </button>
+<button class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">event</span> Outlook (.ics)
+                  </button>
+<button class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Apple iCal
+                  </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 4: Diagnostic Baseline -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-space-md shadow-sm transition-all hover:bg-surface-container">
+<div class="flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-label-md text-label-md flex-shrink-0 mt-0.5">
+                4
+              </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-title-md text-title-md text-on-surface">5-Minute Skill Diagnostic (Optional)</span>
+<span class="px-space-sm py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">Recommended</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                  Calibrate your code generator and personalize AI debugging hints to match your senior engineering background.
+                </p>
+<div class="mt-space-sm">
+<button class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1" type="button">
+<span>Take Baseline Diagnostic</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Immediate Launch Action Bar -->
+<div class="rounded-xl bg-surface-container p-space-md flex flex-col sm:flex-row items-center justify-between gap-space-md mt-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">play_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Lesson 1.1 Ready for Streaming</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Autonomous Loop Foundations (14 mins)</span>
+</div>
+</div>
+<button class="w-full sm:w-auto px-space-lg py-space-sm rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container hover:text-on-primary transition-all flex items-center justify-center gap-space-xs shadow-md" type="button">
+<span>Launch Course Player</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- RIGHT COLUMN: Receipt, Corporate Expense & Certificate Telemetry -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- Corporate Expense / Invoice Panel -->
+<div class="rounded-xl bg-surface-container-low p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">receipt_long</span>
+<span class="font-title-md text-title-md text-on-surface">Corporate Billing Summary</span>
+</div>
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm font-semibold">
+              PAID
+            </span>
+</div>
+<div class="flex items-baseline justify-between py-space-xs">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Amount Settled</span>
+<span class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">$96.00 USD</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md bg-surface-container-lowest px-space-sm py-1 rounded">
+<span class="material-symbols-outlined text-[16px] text-on-surface">credit_card</span>
+<span>Apple Pay (•••• 4829)</span>
+</div>
+</div>
+<!-- Billing Entity Data -->
+<div class="p-space-sm rounded-lg bg-surface-container-lowest flex flex-col gap-1 text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex justify-between">
+<span>Billed to:</span>
+<span class="text-on-surface font-medium">Acme Corp Enterprise Tech</span>
+</div>
+<div class="flex justify-between">
+<span>VAT / Tax ID:</span>
+<span class="text-on-surface font-mono">US-94810294-TX</span>
+</div>
+<div class="flex justify-between">
+<span>Dispatched to:</span>
+<span class="text-on-surface truncate ml-2">sarah.jenkins@acme.corp</span>
+</div>
+</div>
+<!-- Corporate L&D 1-Click Export Actions -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<button class="w-full py-space-xs px-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center justify-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-primary text-[18px]">download</span>
+<span>Download Corporate PDF Receipt</span>
+</button>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-space-xs px-space-xs rounded-lg bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors flex items-center justify-center gap-1 truncate shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span> Concur Export
+              </button>
+<button class="py-space-xs px-space-xs rounded-lg bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors flex items-center justify-center gap-1 truncate shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">forward_to_inbox</span> Forward to HR
+              </button>
+</div>
+</div>
+</div>
+<!-- Certificate & Cohort Readiness Widget -->
+<div class="rounded-xl bg-surface-container-low p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">workspace_premium</span>
+              Verified Credential Pathway
+            </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-mono">ID: EDF-V-2025</span>
+</div>
+<!-- Credential Mini Preview Card -->
+<div class="p-space-md rounded-lg bg-surface-container-lowest flex flex-col gap-space-sm shadow-sm relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 w-20 h-20 rounded-full bg-primary-fixed/30 pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-widest">EduFlow Certified Architect</span>
+<span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Sarah Jenkins</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Full-Stack AI Agents in TypeScript &amp; Python</span>
+</div>
+<!-- Milestones Breakdown -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs text-center">
+<div class="p-1 rounded bg-surface-container-low">
+<div class="font-label-md text-label-md text-on-surface font-bold">22</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Lessons</div>
+</div>
+<div class="p-1 rounded bg-surface-container-low">
+<div class="font-label-md text-label-md text-on-surface font-bold">5</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Projects</div>
+</div>
+<div class="p-1 rounded bg-surface-container-low">
+<div class="font-label-md text-label-md text-on-surface font-bold">1</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Capstone</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Instructor Note & Clinic Pass Card -->
+<div class="rounded-xl bg-surface-container-low p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<img class="w-11 h-11 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Close up professional portrait of Dr. Elena Vance, a female lead AI architect with glasses, warm confident expression, dark hair, soft natural office lighting with warm ambient indigo rim light, modern software company setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_vND6YAtZ_Rw-bObNoMFvXsxaWoifFVWc4GgJCaKGTKq_AmrxSjpC6JrD2S3nl1bJciNA8jEBW9BzbHKLgIJRljljwoUEwALG71xhhgCDanYDZyOjkCvmz6IJy9jwmBo5klQzE3hTrsgKY9VcY8NNUYCENd1Ubt7p43e2K0ek0XrLotr0MXJYGrvKybcxZWSwnan4lJnSMof3vXLuFUagUvdqDWPkd0PmlGRjP1I"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Dr. Elena Vance</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Lead AI Architect &amp; Course Director</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic mt-1">
+            "Welcome aboard Sarah! We designed this cohort for production engineers who want zero fluff. Check your sandbox terminal to test your first LangGraph reducer."
+          </p>
+<div class="mt-space-xs flex items-center justify-between p-space-sm rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">confirmation_number</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Clinic #12 VIP Pass: State Reducers</span>
+</div>
+<span class="px-space-xs py-0.5 rounded bg-secondary-container text-on-secondary-fixed text-label-sm font-label-sm">Active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Trust & Verification Footer Strip inside Modal Body -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm pt-space-sm text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-md flex-wrap justify-center sm:justify-start">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">verified</span>
+          SOC-2 Type II Certified Records
+        </span>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">security</span>
+          30-Day Money-Back Guarantee
+        </span>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">cloud_done</span>
+          99.9% Sandbox GPU Uptime SLA
+        </span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="text-label-sm font-label-sm text-outline">Support:</span>
+<a class="text-label-sm font-label-sm text-primary hover:underline" href="mailto:support@eduflow.io">support@eduflow.io</a>
+</div>
+</div>
+</div>
+</div></main><footer class="px-space-lg py-space-md bg-surface-container-low flex items-center justify-between"><div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm"><span class="material-symbols-outlined text-[16px]">lock</span><span>Encrypted Checkout</span></div><div class="flex items-center gap-space-sm"><button class="px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors" type="button">Cancel</button><button class="px-space-md py-space-sm rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container hover:text-on-primary transition-colors" type="button">Continue</button></div></footer></div></div></body></html>

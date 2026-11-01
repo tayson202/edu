@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "error-container": "#ffdad6", "on-error": "#ffffff", "surface-container-high": "#e3e7ff", "tertiary": "#684000", "secondary-fixed": "#6ffbbe", "primary-container": "#4f46e5", "on-secondary": "#ffffff", "on-error-container": "#93000a", "inverse-surface": "#282f49", "error": "#ba1a1a", "background": "#faf8ff", "primary-fixed-dim": "#c3c0ff", "on-primary-container": "#dad7ff", "surface-tint": "#4d44e3", "inverse-primary": "#c3c0ff", "primary": "#3525cd", "on-secondary-fixed-variant": "#005236", "on-secondary-container": "#00714d", "surface-container-highest": "#dbe1ff", "surface-variant": "#dbe1ff", "surface": "#faf8ff", "on-surface-variant": "#464555", "on-tertiary-fixed": "#2a1700", "secondary": "#006c49", "outline-variant": "#c7c4d8", "inverse-on-surface": "#eff0ff", "on-tertiary-fixed-variant": "#653e00", "on-primary-fixed-variant": "#3323cc", "surface-dim": "#d2d9fa", "on-background": "#131a33", "surface-container-low": "#f3f3ff", "on-tertiary-container": "#ffd4a4", "surface-bright": "#faf8ff", "on-secondary-fixed": "#002113", "surface-container-lowest": "#ffffff", "on-surface": "#131a33", "secondary-container": "#6cf8bb", "on-primary": "#ffffff", "on-tertiary": "#ffffff", "secondary-fixed-dim": "#4edea3", "tertiary-container": "#885500", "tertiary-fixed-dim": "#ffb95f", "primary-fixed": "#e2dfff", "surface-container": "#ebedff", "tertiary-fixed": "#ffddb8", "on-primary-fixed": "#0f0069", "outline": "#777587" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-xs": "0.25rem", "margin-mobile": "1rem", "space-xl": "2.5rem", "margin": "2rem", "gutter": "1.5rem", "gutter-mobile": "1rem", "space-lg": "1.5rem", "space-md": "1rem" }, "fontFamily": { "headline-sm": ["Plus Jakarta Sans"], "body-sm": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "display-hero": ["Plus Jakarta Sans"], "display-hero-mobile": ["Plus Jakarta Sans"], "title-md": ["Inter"], "body-md": ["Inter"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "label-md": ["Plus Jakarta Sans"] }, "fontSize": { "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}], "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}], "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}], "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600"}], "display-hero": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.025em", "fontWeight": "800"}], "display-hero-mobile": ["34px", {"lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "800"}], "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600"}], "body-md": ["15px", {"lineHeight": "24px", "fontWeight": "400"}], "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700"}], "headline-lg-mobile": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700"}], "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}], "label-md": ["13px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter-mobile flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs flex-1 min-w-0"><img alt="EduFlow Brand Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WcaSCEZ7GziNSkQILNUcZnzh_fxlzdMTPHPRKBD6GwTbIhb-yD8F_AgoEcPvL28qrzzOW65oQGVhl2d9FLGF9Xc592dVYkuvFXNr2CZAwGO14E__lhbYMNhA__8PtjEl-5t_8phpEvdNBQuREPWI7mL7CJka91Lo5zu3wJFl8R0sfDl_buKvScXW17rT9CJ6fglhShkP6PZaziRJwE8nj9Peq8d7E_9jxqtrg2W1E"/><span class="font-headline-sm text-headline-sm tracking-tight text-primary truncate">EduFlow</span><span class="hidden">Marketplace Explore</span></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Switch Role" class="min-w-[44px] min-h-[44px] px-space-xs py-space-xs flex items-center gap-space-xs bg-surface-container-high rounded-full text-on-surface-variant hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[18px] text-primary">swap_horiz</span><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface pr-1">Student</span></button><a aria-label="Search" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface transition-colors" data-path="marketplace-search" href="#"><span class="material-symbols-outlined text-[22px]">search</span></a><button aria-label="Educator Profile" class="w-11 h-11 flex items-center justify-center rounded-full p-0.5" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCby1pFMld_Ow7a9ZPhVhDaBPP83wAkBFMeeZgp2wUZzEk_fGftkQqnplGxxHGLhF1BbMhqY4pNdyT9YUV2vGZB9NSD6ep_U6dMkET2IQ6V4SYnHJt9xWUF3dSTRWk6IxKkRsjATjN15JyMbaMkah4RguoognJ8wsJZn1VvqtuonkT0sBFuTMwFE7q52mVbng_VLQGBHFpeQr6AbqjylQohgBV7IJcSHU43qFon2d0"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Sticky Search & Quick Filter Bar -->
+<div class="sticky top-16 z-30 bg-surface/95 backdrop-blur-md pb-space-sm px-gutter-mobile pt-space-xs shadow-sm">
+<div class="flex items-center gap-space-xs">
+<div class="relative flex-1 flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline text-[20px] pointer-events-none">search</span>
+<input class="w-full h-11 pl-10 pr-10 bg-surface-container-lowest rounded-xl font-body-md text-body-md text-on-surface placeholder:text-outline outline-none shadow-sm focus:ring-2 focus:ring-primary transition-all" id="marketplaceSearchInput" placeholder="Search 1,200+ masterclasses..." type="text"/>
+<button aria-label="Clear query" class="hidden absolute right-3 w-6 h-6 items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface" id="clearSearchBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<!-- Filter Drawer Trigger Button with Active Badge -->
+<button aria-label="Open filter settings" class="relative min-w-[44px] h-11 px-space-xs flex items-center justify-center bg-surface-container-lowest rounded-xl shadow-sm text-on-surface hover:bg-surface-container-low transition-colors" id="filterToggleBtn" type="button">
+<span class="material-symbols-outlined text-[20px] text-primary">tune</span>
+<span class="absolute -top-1.5 -right-1.5 bg-primary text-on-primary font-label-sm text-label-sm w-5 h-5 rounded-full flex items-center justify-center shadow-md">2</span>
+</button>
+</div>
+<!-- Active Filter Tags Row -->
+<div class="flex items-center gap-space-xs mt-space-xs overflow-x-auto pb-0.5" style="-ms-overflow-style:none; scrollbar-width:none;">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm flex-shrink-0">
+        Level: Intermediate
+        <span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-primary">close</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm flex-shrink-0">
+        Pricing: Paid
+        <span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-primary">close</span>
+</span>
+<button class="font-label-sm text-label-sm text-primary underline ml-1 flex-shrink-0" type="button">Reset</button>
+</div>
+<!-- Horizontal Category Pills -->
+<div class="flex items-center gap-space-xs mt-space-xs overflow-x-auto" style="-ms-overflow-style:none; scrollbar-width:none;">
+<button class="category-pill active px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all flex-shrink-0 bg-primary text-on-primary shadow-sm" data-category="all" type="button">
+        All
+      </button>
+<button class="category-pill px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all flex-shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-category="web-dev" type="button">
+        Web Dev
+      </button>
+<button class="category-pill px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all flex-shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-category="ai" type="button">
+        AI &amp; Data
+      </button>
+<button class="category-pill px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all flex-shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-category="business" type="button">
+        Business
+      </button>
+<button class="category-pill px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all flex-shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-category="design" type="button">
+        Design
+      </button>
+<button class="category-pill px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all flex-shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-category="mobile" type="button">
+        Mobile
+      </button>
+</div>
+</div>
+<div class="px-gutter-mobile py-space-sm flex flex-col gap-space-lg">
+<!-- Hero Promo Card -->
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary-container to-surface-tint text-on-primary shadow-md p-space-md">
+<div class="relative z-10 flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+            LIMITED OFFER
+          </span>
+<!-- Live Countdown -->
+<div class="flex items-center gap-1 text-on-primary-container font-label-sm text-label-sm bg-black/20 px-2 py-0.5 rounded-full backdrop-blur-sm">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span class="tracking-wider font-bold" id="promoCountdown">14h 28m 09s</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight text-on-primary leading-tight mt-1">
+            Spring Learning Surge
+          </h2>
+<p class="font-body-sm text-body-sm text-on-primary-container mt-1">
+            Take 25% off all verified professional masterclasses today.
+          </p>
+</div>
+<div class="flex items-center justify-between mt-space-xs pt-space-xs">
+<div class="flex -space-x-2 items-center">
+<img class="w-7 h-7 rounded-full object-cover shadow" data-alt="Close up portrait of a smiling software architect instructor in modern minimal office setting, warm lighting, professional headshot photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgbTFCF9LPOe8B5_YbZiY7dgPzP-vohsKa63wb4yWxP_lGk7PhNhkCDPFluCZqgIwjMBoLaKA1-7PQQZj6S71Yp3u2RChP_JzgNdAoCfPb5KEDNufDIshzO3bg2UmMczmoyiiEUd6WvQkbZ9pECN3rCwIw0Q8WQXcRuYOT1h1iiX1Uhh178uYDdRiV0xpFbCqfXvoZpcsDPeAr4IGIORyl5ldojdltI8wIu7li0Oc"/>
+<img class="w-7 h-7 rounded-full object-cover shadow" data-alt="Professional educator portrait of a young female data scientist with glasses, soft studio illumination, warm modern aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQNHss5sNNd67ZhYtxegtm4dv94oWA9eCmvWzS8k8eY3xU6jB8avFpLSCbiZ22724EdbppGe9-rSyJ0I76dtSdsWuLKfNnTVYdne81FxuoIFYbC2_WZHVNdPZIdTyr4ms7062rpFZYX8lfpircUC7sHdsaDC8XA8ZPaka1mBbctyexXLRAHDQYt7SApqC8T1WAieMB8Fw7YvlLqBVpvG-alC948FxqQTYbqzpuSxc"/>
+<img class="w-7 h-7 rounded-full object-cover shadow" data-alt="Editorial headshot of an executive product manager with creative confidence, crisp lighting, deep indigo backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdvrNrL_DZ-utGGGcn_11LJYjlSX1HX_5QRCU2KuVZ2bzQna8wA-OtDLoOnDqcDyrzRCUuRBqzgTuEnwHeKdvxnNRNHKSXTfrjrRTCdgM1XQcANUOOCZcjFjCyyHLajxzwXxxC6HRa75D5QEN0UdZbGlrI6-UcuKx9DbTSEY1kZoQue_M6h5AvjRNwP_9hnXqylM5PavCOczzUnBE_KoFCrVxtXfcOsNztoMx7Gtk"/>
+<span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-on-primary text-[10px] font-bold backdrop-blur-sm shadow">+40</span>
+</div>
+<button class="px-3.5 py-2 rounded-xl bg-secondary text-on-secondary font-label-md text-label-md flex items-center gap-1 shadow-sm hover:opacity-95 active:scale-95 transition-transform" type="button">
+<span>Claim Discount</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Ambient Glow Behind Hero -->
+<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-secondary-container/20 rounded-full blur-2xl pointer-events-none"></div>
+</div>
+<!-- Featured Courses Section -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight">Featured Masterclasses</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Vetted curricula by industry specialists</p>
+</div>
+<a class="font-label-md text-label-md text-primary hover:underline flex items-center gap-0.5" href="#">
+          See all
+          <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<!-- Course Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden flex flex-col transition-all hover:shadow-md">
+<!-- Thumbnail Wrap -->
+<div class="relative w-full aspect-video bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="High tech developer workspace with dual monitors displaying TypeScript and NextJS code, ambient purple and cyan keyboard backlighting, clean corporate modern design aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARjLKXg0Gz1cN6_36CCNo8hDmFSbyjvtqxkNrTZQTE8iWgVBa6GYWUBsJaGzCPGYjPrQlwCmu0077ZZ9g_nKlWRDJzaw5h6dxWB9mSwGA3AhwUx6pNcj0dnqUhwgPiJikhpbltExyrqCoBiZrgVx-G_KZdTqDKaR2Ra0-Wu3Agp-Uidu_xuQ_lj8MCcVuA8nfdp-5-qlHTqoNm_hFjrUvXG3NfpC7PeyNJOarwdH4"/>
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-primary font-label-sm text-label-sm shadow-sm">
+              Web Dev
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm shadow-sm">
+              Bestseller
+            </span>
+</div>
+<div class="absolute bottom-3 right-3 px-2 py-1 rounded-lg bg-inverse-surface/85 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+            24.5 hrs
+          </div>
+</div>
+<!-- Course Meta Details -->
+<div class="p-space-md flex flex-col gap-space-xs">
+<!-- Rating & Enrollment status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm font-bold">4.9</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-fixed-variant">(1.2k)</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified</span>
+              Cohort Certified
+            </div>
+</div>
+<h4 class="font-title-md text-title-md font-semibold text-on-surface line-clamp-2 leading-snug">
+            Full-Stack Next.js 14 &amp; NestJS Enterprise Architecture
+          </h4>
+<!-- Author Info -->
+<div class="flex items-center gap-2 pt-1">
+<img class="w-6 h-6 rounded-full object-cover shadow-sm" data-alt="Instructor Marcus Vance professional headshot, senior platform architect, wearing charcoal crewneck, modern clean studio portrait with soft rim light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJHrn88sy_iUZ4JXBvAlstD1HDDXE3-EH3hSBGlhSW8gxYnAgFvHI2HGeCfTjxE5K8_vaJ68IaDGh5MmJT8qyd52ZkTEwhLT6n4Uzis7oqM0ry2aui9fJhNmyFYMccxUgVfJxAoomzY-4H6Z0I7qkEvy-FGZr5jou8aw74HvXKvpN30HV4kcMjKm1Ikiwz5fwKy0FWILmvAKiFrZgOLyTSPfiDLgeTTX2LEBbSrcc"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Marcus Vance</span>
+<span class="text-outline text-xs">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Staff Architect</span>
+</div>
+<!-- Price & Primary CTA -->
+<div class="flex items-center justify-between mt-space-xs pt-space-xs bg-surface-container-low p-2.5 rounded-xl">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Tuition</span>
+<div class="flex items-baseline gap-1.5">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">$84.99</span>
+<span class="font-body-sm text-body-sm text-outline line-through">$129.99</span>
+</div>
+</div>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md flex items-center gap-1 shadow-sm hover:bg-primary-container active:scale-95 transition-all" type="button">
+<span>Enroll Now</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Course Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden flex flex-col transition-all hover:shadow-md">
+<!-- Thumbnail Wrap -->
+<div class="relative w-full aspect-video bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Futuristic visual of deep learning neural networks and LLM data flow diagrams on modern glass interface, indigo gradient glow, sleek UI tech representation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbu_ioYFcBhawchAor_dJqLItCdPaj4hC3MpA7grSKno_IgXQgg0aSPS_tSzjoCyDjS7UiKAXi56AvSUYgmFhbSwSvGBEL6wzlaseLlZjk5FMlzJf87CrpZ6mVs1WUgaQaagRFgyfh3IwAqHJx5LQoDKBa92uQAYvjCFtgJxNnm7bKye6gNJIJ5XG-SUEztpXxjeP56j1muG7GwHeSRLxM-imCSYsFY5tKoEggiBY"/>
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-primary font-label-sm text-label-sm shadow-sm">
+              AI &amp; Data
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm shadow-sm">
+              New Batch
+            </span>
+</div>
+<div class="absolute bottom-3 right-3 px-2 py-1 rounded-lg bg-inverse-surface/85 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+            18.0 hrs
+          </div>
+</div>
+<!-- Course Meta Details -->
+<div class="p-space-md flex flex-col gap-space-xs">
+<!-- Rating & Status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm font-bold">4.95</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-fixed-variant">(840)</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">groups</span>
+              98 Seats Open
+            </div>
+</div>
+<h4 class="font-title-md text-title-md font-semibold text-on-surface line-clamp-2 leading-snug">
+            Autonomous LLM Agents with LangGraph &amp; Vector Databases
+          </h4>
+<!-- Author Info -->
+<div class="flex items-center gap-2 pt-1">
+<img class="w-6 h-6 rounded-full object-cover shadow-sm" data-alt="Dr. Elena Rostova, machine learning researcher, elegant professional portrait against minimal slate and indigo backdrop, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnkqHlVIR_pQq4RLFUZDy7CzGNKjrUJyE_XKtuw7vainWC8qbO9leapZdtogMI4V3IJEpreFlkopR-y0zYujtcBr3bJ5jT7WzvrIfvOXrJjqszIyilCsMQ0QFPKtT4EHXIiCOZe4N1qliyzk3vVQNCap4rOQYbz8t1p-ajJAc5nOkAtoyvpbCRL6bwXTmvmiklu8WYAAkk1jOsWLZo_cpVj_QbTjCdE26b-TQ09fw"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dr. Elena Rostova</span>
+<span class="text-outline text-xs">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">AI Principal</span>
+</div>
+<!-- Price & Primary CTA -->
+<div class="flex items-center justify-between mt-space-xs pt-space-xs bg-surface-container-low p-2.5 rounded-xl">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Tuition</span>
+<div class="flex items-baseline gap-1.5">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">$99.00</span>
+<span class="font-body-sm text-body-sm text-outline line-through">$149.00</span>
+</div>
+</div>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md flex items-center gap-1 shadow-sm hover:bg-primary-container active:scale-95 transition-all" type="button">
+<span>Enroll Now</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Top Instructors Carousel Section -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight">Top Instructors</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Learn directly from verified practitioners</p>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Previous instructor" class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" id="instructorPrevBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+</button>
+<button aria-label="Next instructor" class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" id="instructorNextBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Horizontal Instructors Scroll Track -->
+<div class="flex gap-space-md overflow-x-auto pb-space-xs scroll-smooth" id="instructorsTrack" style="-ms-overflow-style:none; scrollbar-width:none;">
+<!-- Instructor Card 1 -->
+<div class="min-w-[240px] max-w-[240px] bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex flex-col items-center text-center relative flex-shrink-0">
+<div class="relative mb-space-xs">
+<img class="w-16 h-16 rounded-full object-cover shadow-sm" data-alt="Instructor portrait of Sarah Sterling, Fintech Product Lead, warm welcoming expression, modern tech office environment, high resolution portrait photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb17y3E8x5jiP9TXD7ZY6suqrT40ee2vD-s93dOpJbfj7pFobp26ctdJCXuQ0g0wyUYRyqccj-vaOs6hrz5PTcY_ZzZZMh4V_eA7yt8LmI3fsQFdADB04MgyYYoC2qaZ5VMbePlt9pFT7Hh6TjXFtdKvbpHBbtGcxcUGiOpQhrAupUWMR5TGBhyBuCxUAoDKL_VEOAkRXjFRwPn9QBskGB0NtnBk_geRIAioriVjQ"/>
+<span class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-[12px] shadow" title="Verified Creator">
+<span class="material-symbols-outlined text-[12px]">check</span>
+</span>
+</div>
+<h4 class="font-title-md text-title-md font-semibold text-on-surface">Sarah Sterling</h4>
+<span class="font-body-sm text-body-sm text-on-surface-variant">VP Product @ FinScale</span>
+<div class="w-full flex items-center justify-around py-2 my-2 rounded-xl bg-surface-container-low">
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md font-bold text-on-surface">34.8k</span>
+<span class="font-label-sm text-label-sm text-outline">Students</span>
+</div>
+<div class="w-px h-6 bg-outline-variant"></div>
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md font-bold text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+                4.96
+              </span>
+<span class="font-label-sm text-label-sm text-outline">Rating</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container text-primary font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" type="button">
+            View 4 Courses
+          </button>
+</div>
+<!-- Instructor Card 2 -->
+<div class="min-w-[240px] max-w-[240px] bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex flex-col items-center text-center relative flex-shrink-0">
+<div class="relative mb-space-xs">
+<img class="w-16 h-16 rounded-full object-cover shadow-sm" data-alt="Instructor portrait of Alex Chen, Design Systems Lead at global enterprise, sleek glasses, dark casual blazer, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATeqMaKoITSeoSsCg6I243YVSmgsP713_RqkUSOlnyjXcWj6r1F1Ve6MwJXnG2XJM7PVGlt6j2V1Lxa7Zb_07-chpTPa_qLROdr0H7T9bN5iZWnUyi0WLQ4UIJIBCxUC4K1yfLU5S2WM-KIsbyI0UlLxHckOG7jvzAMpqagcTLNiKzop76ptcxEBWkrstZd2vO4bucOsIb49HAEAZTx8NLhTYboJZFEtdHqvHWf4c"/>
+<span class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-[12px] shadow" title="Verified Creator">
+<span class="material-symbols-outlined text-[12px]">check</span>
+</span>
+</div>
+<h4 class="font-title-md text-title-md font-semibold text-on-surface">Alex Chen</h4>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Design Systems Lead</span>
+<div class="w-full flex items-center justify-around py-2 my-2 rounded-xl bg-surface-container-low">
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md font-bold text-on-surface">21.5k</span>
+<span class="font-label-sm text-label-sm text-outline">Students</span>
+</div>
+<div class="w-px h-6 bg-outline-variant"></div>
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md font-bold text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+                4.91
+              </span>
+<span class="font-label-sm text-label-sm text-outline">Rating</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container text-primary font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" type="button">
+            View 3 Courses
+          </button>
+</div>
+<!-- Instructor Card 3 -->
+<div class="min-w-[240px] max-w-[240px] bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex flex-col items-center text-center relative flex-shrink-0">
+<div class="relative mb-space-xs">
+<img class="w-16 h-16 rounded-full object-cover shadow-sm" data-alt="Instructor portrait of David Kalu, Cloud Security Architect, engaging professional pose, navy backdrop with crisp edge lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEXOn1oSWQ8d0JuqaAYUm3ZCpZL2_tmzMhy1MgcMmDf0RN8msWM0OPH3f2lMcJ2AX-my-Tk3V9lvMu3ZS1N8w9ayo6bpEl7GYmyNZMaqXtD9ShJQVPfyMu1q7VJCZkTefIJdCLxTLho9khwi9pkb33WkLqXn-Hk2WSaPfgPLnI5trkddupfotruo6pBMz4Y1mVSURmSKq0FnSe04ej_GihrUDYX8MI3W04jx2d8rU"/>
+<span class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-[12px] shadow" title="Verified Creator">
+<span class="material-symbols-outlined text-[12px]">check</span>
+</span>
+</div>
+<h4 class="font-title-md text-title-md font-semibold text-on-surface">David Kalu</h4>
+<span class="font-body-sm text-body-sm text-on-surface-variant">DevOps &amp; Cloud Sec</span>
+<div class="w-full flex items-center justify-around py-2 my-2 rounded-xl bg-surface-container-low">
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md font-bold text-on-surface">19.2k</span>
+<span class="font-label-sm text-label-sm text-outline">Students</span>
+</div>
+<div class="w-px h-6 bg-outline-variant"></div>
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md font-bold text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+                4.89
+              </span>
+<span class="font-label-sm text-label-sm text-outline">Rating</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container text-primary font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" type="button">
+            View 2 Courses
+          </button>
+</div>
+</div>
+</div>
+<!-- Live Study Cohort Stat Box (Moment of Delight) -->
+<div class="rounded-2xl bg-surface-container p-space-md flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">hub</span>
+</div>
+<div>
+<span class="font-label-md text-label-md text-on-surface font-semibold block">4,812 Active Learners Online</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Collaborating across 42 countries right now</span>
+</div>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-secondary animate-ping mr-1"></span>
+</div>
+</div>
+<!-- Interactive Filter Drawer / Sheet Modal -->
+<div class="hidden fixed inset-0 z-50 flex items-end justify-center bg-inverse-surface/50 backdrop-blur-sm transition-opacity" id="filterDrawerModal">
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-t-3xl shadow-xl flex flex-col max-h-[751px] overflow-hidden transform translate-y-full transition-transform duration-300" id="filterDrawerSheet">
+<!-- Drawer Header -->
+<div class="px-gutter-mobile py-space-md flex items-center justify-between border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">filter_list</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Refine Catalog</h3>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" id="closeFilterDrawerBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Drawer Content Scrollable -->
+<div class="p-gutter-mobile overflow-y-auto flex flex-col gap-space-md">
+<!-- Experience Level -->
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-wider">Experience Level</span>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-2.5 px-2 rounded-xl bg-surface-container-low text-on-surface font-label-sm text-label-sm text-center hover:bg-surface-container" type="button">Beginner</button>
+<button class="py-2.5 px-2 rounded-xl bg-primary text-on-primary font-label-sm text-label-sm text-center shadow-sm" type="button">Intermediate</button>
+<button class="py-2.5 px-2 rounded-xl bg-surface-container-low text-on-surface font-label-sm text-label-sm text-center hover:bg-surface-container" type="button">Executive / Adv</button>
+</div>
+</div>
+<!-- Pricing Option -->
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-wider">Pricing Type</span>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2.5 rounded-xl bg-primary text-on-primary font-label-sm text-label-sm text-center shadow-sm" type="button">Paid Masterclass</button>
+<button class="py-2.5 rounded-xl bg-surface-container-low text-on-surface font-label-sm text-label-sm text-center hover:bg-surface-container" type="button">Free Preview</button>
+</div>
+</div>
+<!-- Format & Duration -->
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-wider">Pacing</span>
+<div class="flex flex-col gap-2">
+<label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low cursor-pointer">
+<span class="font-body-md text-body-md text-on-surface">Self-Paced Intensive</span>
+<input checked="" class="w-5 h-5 accent-primary rounded cursor-pointer" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low cursor-pointer">
+<span class="font-body-md text-body-md text-on-surface">Live Weekly Office Hours</span>
+<input checked="" class="w-5 h-5 accent-primary rounded cursor-pointer" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low cursor-pointer">
+<span class="font-body-md text-body-md text-on-surface">Includes Verified Certificate</span>
+<input checked="" class="w-5 h-5 accent-primary rounded cursor-pointer" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Drawer Action Bottom Footer -->
+<div class="p-gutter-mobile bg-surface-container-lowest flex items-center gap-space-sm border-t border-surface-container">
+<button class="w-1/3 py-3 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors" id="resetFilterBtn" type="button">
+          Clear All
+        </button>
+<button class="w-2/3 py-3 rounded-xl bg-primary text-on-primary font-label-md text-label-md shadow-md hover:bg-primary-container active:scale-95 transition-all" id="applyFilterBtn" type="button">
+          Apply Filters (2)
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initMarketplaceInteractions() {
+    // 1. Promo Countdown Micro-Timer
+    const countdownEl = document.getElementById('promoCountdown');
+    if (countdownEl) {
+      let secondsRemaining = 14 * 3600 + 28 * 60 + 9;
+      setInterval(() => {
+        if (secondsRemaining > 0) {
+          secondsRemaining--;
+          const hrs = Math.floor(secondsRemaining / 3600);
+          const mins = Math.floor((secondsRemaining % 3600) / 60);
+          const secs = secondsRemaining % 60;
+          countdownEl.textContent = `${hrs}h ${mins < 10 ? '0' : ''}${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+        }
+      }, 1000);
+    }
+
+    // 2. Search Input Clear Button Visibility
+    const searchInput = document.getElementById('marketplaceSearchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    if (searchInput && clearSearchBtn) {
+      searchInput.addEventListener('input', () => {
+        if (searchInput.value.trim().length > 0) {
+          clearSearchBtn.classList.remove('hidden');
+          clearSearchBtn.classList.add('flex');
+        } else {
+          clearSearchBtn.classList.add('hidden');
+          clearSearchBtn.classList.remove('flex');
+        }
+      });
+      clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearSearchBtn.classList.add('hidden');
+        clearSearchBtn.classList.remove('flex');
+        searchInput.focus();
+      });
+    }
+
+    // 3. Category Pills Toggle Active
+    const categoryPills = document.querySelectorAll('.category-pill');
+    categoryPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        categoryPills.forEach(p => {
+          p.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          p.classList.add('bg-surface-container', 'text-on-surface-variant');
+        });
+        pill.classList.remove('bg-surface-container', 'text-on-surface-variant');
+        pill.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      });
+    });
+
+    // 4. Instructors Horizontal Scroll Controls
+    const track = document.getElementById('instructorsTrack');
+    const prevBtn = document.getElementById('instructorPrevBtn');
+    const nextBtn = document.getElementById('instructorNextBtn');
+    if (track && prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', () => {
+        track.scrollBy({ left: -260, behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', () => {
+        track.scrollBy({ left: 260, behavior: 'smooth' });
+      });
+    }
+
+    // 5. Filter Drawer Toggle Micro-interaction
+    const filterToggleBtn = document.getElementById('filterToggleBtn');
+    const filterDrawerModal = document.getElementById('filterDrawerModal');
+    const filterDrawerSheet = document.getElementById('filterDrawerSheet');
+    const closeFilterDrawerBtn = document.getElementById('closeFilterDrawerBtn');
+    const applyFilterBtn = document.getElementById('applyFilterBtn');
+
+    function openDrawer() {
+      filterDrawerModal.classList.remove('hidden');
+      setTimeout(() => {
+        filterDrawerSheet.classList.remove('translate-y-full');
+        filterDrawerSheet.classList.add('translate-y-0');
+      }, 10);
+    }
+
+    function closeDrawer() {
+      filterDrawerSheet.classList.remove('translate-y-0');
+      filterDrawerSheet.classList.add('translate-y-full');
+      setTimeout(() => {
+        filterDrawerModal.classList.add('hidden');
+      }, 280);
+    }
+
+    if (filterToggleBtn && filterDrawerModal && closeFilterDrawerBtn) {
+      filterToggleBtn.addEventListener('click', openDrawer);
+      closeFilterDrawerBtn.addEventListener('click', closeDrawer);
+      if (applyFilterBtn) applyFilterBtn.addEventListener('click', closeDrawer);
+      
+      filterDrawerModal.addEventListener('click', (e) => {
+        if (e.target === filterDrawerModal) closeDrawer();
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-label-md"><div class="h-16 px-space-xs flex items-center justify-around"><a aria-current="page" class="min-w-[44px] min-h-[44px] flex flex-col items-center justify-center gap-0.5 transition-colors flex-1 text-primary font-label-md" data-path="marketplace-explore" href="#"><span class="material-symbols-outlined text-[24px]">explore</span><span class="font-label-sm text-label-sm">Explore</span></a><a class="min-w-[44px] min-h-[44px] flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors flex-1" data-path="my-learning" href="#"><span class="material-symbols-outlined text-[24px]">play_lesson</span><span class="font-label-sm text-label-sm">Learning</span></a><a class="min-w-[44px] min-h-[44px] flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors flex-1" data-path="teacher-studio" href="#"><span class="material-symbols-outlined text-[24px]">analytics</span><span class="font-label-sm text-label-sm">Studio</span></a><a class="min-w-[44px] min-h-[44px] flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors flex-1" data-path="admin-ledger" href="#"><span class="material-symbols-outlined text-[24px]">verified_user</span><span class="font-label-sm text-label-sm">Ledger</span></a></div></nav></body></html>
