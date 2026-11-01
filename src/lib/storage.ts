@@ -33,6 +33,13 @@ import {
   initialAuditLogs,
   initialNotifications
 } from './seed-data';
+import {
+  hashPassword,
+  verifyPassword,
+  generateSalt,
+  validatePasswordStrength,
+  isValidEmail
+} from './crypto-auth';
 
 const STORAGE_KEY = 'ulearn_state_v1';
 const CURRENT_USER_KEY = 'ulearn_current_user_id';
@@ -41,6 +48,7 @@ export interface AppState {
   users: User[];
   currentUserId: string;
   isAuthenticated: boolean;
+  sessionExpiry?: number;
   categories: Category[];
   courses: Course[];
   enrollments: CourseEnrollment[];
@@ -88,7 +96,22 @@ export function loadState(): AppState {
       return state;
     }
     const parsed = JSON.parse(raw);
-    return { ...getInitialState(), ...parsed };
+    const combinedState: AppState = { ...getInitialState(), ...parsed };
+
+    // Ensure new initial seed users (MEMBER, SELLER, COACH, BRAND) are always available
+    const existingIds = new Set(combinedState.users.map(u => u.id));
+    for (const initUser of initialUsers) {
+      if (!existingIds.has(initUser.id)) {
+        combinedState.users.push(initUser);
+      }
+    }
+
+    // Check session expiration if sessionExpiry exists
+    if (combinedState.sessionExpiry && Date.now() > combinedState.sessionExpiry) {
+      combinedState.isAuthenticated = false;
+    }
+
+    return combinedState;
   } catch (err) {
     console.error('Failed to parse localStorage state:', err);
     return getInitialState();
@@ -106,7 +129,7 @@ export function saveState(state: AppState): void {
 }
 
 // -------------------------------------------------------------
-// USER & ROLE SWITCHING (RBAC)
+// USER & ROLE AUTHENTICATION (RBAC & CREDENTIAL SECURITY)
 // -------------------------------------------------------------
 
 export function getCurrentUser(state: AppState): User {
@@ -120,6 +143,7 @@ export function switchUser(role: UserRole): User {
   if (targetUser) {
     state.currentUserId = targetUser.id;
     state.isAuthenticated = true;
+    state.sessionExpiry = Date.now() + (24 * 60 * 60 * 1000);
     saveState(state);
     return targetUser;
   }
@@ -128,9 +152,166 @@ export function switchUser(role: UserRole): User {
 
 export function isUserAuthenticated(state?: AppState): boolean {
   const s = state || loadState();
-  return s.isAuthenticated ?? true;
+  if (!s.isAuthenticated) return false;
+  if (s.sessionExpiry && Date.now() > s.sessionExpiry) return false;
+  return true;
 }
 
+export interface RegisterUserInput {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
+
+/**
+ * Registers a new user with cryptographic password hashing,
+ * uniqueness verification, strength checking, and role setup.
+ */
+export async function registerUser(input: RegisterUserInput): Promise<{ success: boolean; user?: User; error?: string }> {
+  const { name, email, password, role } = input;
+
+  if (!name || !name.trim()) {
+    return { success: false, error: 'Full name is required.' };
+  }
+  if (!email || !isValidEmail(email)) {
+    return { success: false, error: 'A valid email address is required.' };
+  }
+
+  const strength = validatePasswordStrength(password);
+  if (!strength.isValid) {
+    return { success: false, error: strength.errors[0] || 'Password does not meet security requirements.' };
+  }
+
+  const state = loadState();
+  const existing = state.users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
+  if (existing) {
+    return { success: false, error: 'An account with this email address already exists. Please log in instead.' };
+  }
+
+  const salt = generateSalt();
+  const passwordHash = await hashPassword(password, salt);
+  
+  // Seller, Coach, and Brand accounts start with PENDING_APPROVAL for business features
+  const isBusinessRole = role === 'SELLER' || role === 'COACH' || role === 'BRAND';
+  const status = isBusinessRole ? 'PENDING_APPROVAL' : 'ACTIVE';
+
+  const newUser: User = {
+    id: `usr-${role.toLowerCase()}-${Date.now()}`,
+    name: name.trim(),
+    email: email.trim().toLowerCase(),
+    role: role,
+    status: status,
+    salt,
+    passwordHash,
+    avatarUrl: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80`,
+    headline: `${role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()} Member at ULearn`,
+    bio: `Active ${role.toLowerCase()} account created on ${new Date().toLocaleDateString()}.`,
+    isEmailVerified: true,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (role === 'MEMBER') {
+    newUser.memberProfile = {
+      id: `mp-${Date.now()}`,
+      userId: newUser.id,
+      interests: ['General Learning'],
+      learningGoals: ['Explore marketplace programs & products'],
+      ordersCount: 0,
+      enrolledProgramsCount: 0,
+    };
+  } else if (role === 'SELLER') {
+    newUser.sellerProfile = {
+      id: `slp-${Date.now()}`,
+      userId: newUser.id,
+      storeName: `${name.trim()}'s Digital Studio`,
+      payoutEmail: email.trim().toLowerCase(),
+      totalProducts: 0,
+      totalSalesCents: 0,
+      averageRating: 5.0,
+      verificationStatus: 'PENDING',
+    };
+  } else if (role === 'COACH') {
+    newUser.coachProfile = {
+      id: `cp-${Date.now()}`,
+      userId: newUser.id,
+      specialty: 'Professional Coaching & Mentorship',
+      hourlyRateCents: 15000,
+      totalClients: 0,
+      totalSessionsCompleted: 0,
+      verificationStatus: 'PENDING',
+    };
+  } else if (role === 'BRAND') {
+    newUser.brandProfile = {
+      id: `bp-${Date.now()}`,
+      userId: newUser.id,
+      brandName: `${name.trim()} Brand Solutions`,
+      legalEntityName: `${name.trim()} LLC`,
+      industry: 'Enterprise Technology & Education',
+      officialWebsite: 'https://ulearn.com',
+      productLinesCount: 0,
+      partnershipTier: 'STANDARD',
+      verificationStatus: 'PENDING',
+    };
+  }
+
+  state.users.push(newUser);
+  state.currentUserId = newUser.id;
+  state.isAuthenticated = true;
+  state.sessionExpiry = Date.now() + (24 * 60 * 60 * 1000); // 24h
+  saveState(state);
+
+  return { success: true, user: newUser };
+}
+
+/**
+ * Authenticates a user with email and password.
+ * Retrieves role strictly from the trusted database (role cannot be selected during login).
+ */
+export async function loginWithCredentials(
+  email: string, 
+  password: string, 
+  rememberMe: boolean = false
+): Promise<{ success: boolean; user?: User; error?: string }> {
+  if (!email || !email.trim()) {
+    return { success: false, error: 'Please enter your email address.' };
+  }
+  if (!password) {
+    return { success: false, error: 'Please enter your password.' };
+  }
+
+  const state = loadState();
+  const user = state.users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
+  if (!user) {
+    return { success: false, error: 'Invalid email or password. Please check your credentials or register.' };
+  }
+
+  // If user has salt and passwordHash, perform cryptographic verification
+  if (user.passwordHash && user.salt) {
+    const isMatch = await verifyPassword(password, user.salt, user.passwordHash);
+    if (!isMatch) {
+      return { success: false, error: 'Invalid email or password. Please check your credentials.' };
+    }
+  }
+
+  if (user.status === 'SUSPENDED') {
+    return { success: false, error: 'This account has been suspended. Please contact platform administration.' };
+  }
+
+  state.currentUserId = user.id;
+  state.isAuthenticated = true;
+  const expiryDays = rememberMe ? 7 : 1;
+  state.sessionExpiry = Date.now() + (expiryDays * 24 * 60 * 60 * 1000);
+  saveState(state);
+
+  return { success: true, user };
+}
+
+/**
+ * Fast login method for demo personas or backward compatibility
+ */
 export function loginUser(email: string, role?: UserRole): { success: boolean; user?: User; error?: string } {
   const state = loadState();
   let user: User | undefined;
@@ -143,11 +324,12 @@ export function loginUser(email: string, role?: UserRole): { success: boolean; u
   if (!user) {
     return { 
       success: false, 
-      error: 'No account found matching this email. Select one of the quick demo personas below to log in instantly.' 
+      error: 'No account found matching this email. Pick one of the verified role profiles or register a new account.' 
     };
   }
   state.currentUserId = user.id;
   state.isAuthenticated = true;
+  state.sessionExpiry = Date.now() + (24 * 60 * 60 * 1000);
   saveState(state);
   return { success: true, user };
 }
@@ -155,17 +337,103 @@ export function loginUser(email: string, role?: UserRole): { success: boolean; u
 export function logoutUser(): void {
   const state = loadState();
   state.isAuthenticated = false;
+  state.sessionExpiry = 0;
   saveState(state);
+}
+
+/**
+ * Resets a user's password cryptographically
+ */
+export async function resetPassword(email: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
+  const strength = validatePasswordStrength(newPassword);
+  if (!strength.isValid) {
+    return { success: false, error: strength.errors[0] || 'Password does not meet security requirements.' };
+  }
+  const state = loadState();
+  const idx = state.users.findIndex(u => u.email.toLowerCase() === email.trim().toLowerCase());
+  if (idx === -1) {
+    return { success: false, error: 'No account registered with this email address.' };
+  }
+
+  const salt = generateSalt();
+  const passwordHash = await hashPassword(newPassword, salt);
+  state.users[idx].salt = salt;
+  state.users[idx].passwordHash = passwordHash;
+  state.users[idx].updatedAt = new Date().toISOString();
+  saveState(state);
+  return { success: true };
+}
+
+/**
+ * Approves a pending business account (Seller, Coach, or Brand)
+ */
+export function approveUser(userId: string): { success: boolean; error?: string } {
+  const state = loadState();
+  const user = state.users.find(u => u.id === userId);
+  if (!user) return { success: false, error: 'User not found' };
+  user.status = 'ACTIVE';
+  if (user.sellerProfile) user.sellerProfile.verificationStatus = 'VERIFIED';
+  if (user.coachProfile) user.coachProfile.verificationStatus = 'VERIFIED';
+  if (user.brandProfile) user.brandProfile.verificationStatus = 'VERIFIED';
+  saveState(state);
+  return { success: true };
+}
+
+/**
+ * Maps any role to its authorized dashboard route
+ */
+export function getUserRoleDashboard(role: UserRole): string {
+  switch (role) {
+    case 'MEMBER':
+    case 'STUDENT':
+      return '/dashboard/member';
+    case 'SELLER':
+    case 'TEACHER':
+      return '/dashboard/seller';
+    case 'COACH':
+      return '/dashboard/coach';
+    case 'BRAND':
+    case 'ACADEMY_ADMIN':
+      return '/dashboard/brand';
+    case 'ADMIN':
+      return '/admin/dashboard';
+    default:
+      return '/dashboard/member';
+  }
+}
+
+/**
+ * Validates whether a user's role grants access to a specific dashboard
+ */
+export function canAccessDashboard(userRole: UserRole, targetDashboard: 'MEMBER' | 'SELLER' | 'COACH' | 'BRAND' | 'ADMIN'): boolean {
+  if (userRole === 'ADMIN') return true; // Platform Administrator can inspect all dashboards
+  
+  if (targetDashboard === 'MEMBER') {
+    return userRole === 'MEMBER' || userRole === 'STUDENT';
+  }
+  if (targetDashboard === 'SELLER') {
+    return userRole === 'SELLER' || userRole === 'TEACHER';
+  }
+  if (targetDashboard === 'COACH') {
+    return userRole === 'COACH';
+  }
+  if (targetDashboard === 'BRAND') {
+    return userRole === 'BRAND' || userRole === 'ACADEMY_ADMIN';
+  }
+  return false;
 }
 
 export function updateUserProfile(userId: string, updates: Partial<User>): User {
   const state = loadState();
   const idx = state.users.findIndex(u => u.id === userId);
   if (idx !== -1) {
+    // Prevent ordinary profile edits from tampering with role, id, or salt
+    const { role, id, salt, passwordHash, ...safeUpdates } = updates;
     state.users[idx] = {
       ...state.users[idx],
-      ...updates,
+      ...safeUpdates,
       id: userId,
+      updatedAt: new Date().toISOString(),
     };
     saveState(state);
     return state.users[idx];

@@ -1,12 +1,66 @@
 // Shared TypeScript Type Definitions for ULearn Marketplace
 
-export type UserRole = 'STUDENT' | 'TEACHER' | 'ACADEMY_ADMIN' | 'ADMIN';
+export type UserRole = 
+  | 'MEMBER' 
+  | 'SELLER' 
+  | 'COACH' 
+  | 'BRAND' 
+  // Legacy aliases for backward compatibility
+  | 'STUDENT' 
+  | 'TEACHER' 
+  | 'ACADEMY_ADMIN' 
+  | 'ADMIN';
+
+export type AccountStatus = 'ACTIVE' | 'PENDING_APPROVAL' | 'SUSPENDED';
 export type VerificationStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
 export type CourseStatus = 'DRAFT' | 'PENDING_REVIEW' | 'PUBLISHED' | 'ARCHIVED';
 export type CourseLevel = 'ALL_LEVELS' | 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
 export type LessonType = 'VIDEO' | 'TEXT' | 'DOCUMENT' | 'QUIZ';
 export type OrderStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
 export type PayoutStatus = 'REQUESTED' | 'PROCESSING' | 'PAID' | 'REJECTED';
+
+export interface MemberProfile {
+  id: string;
+  userId: string;
+  interests: string[];
+  learningGoals: string[];
+  ordersCount: number;
+  enrolledProgramsCount: number;
+}
+
+export interface SellerProfile {
+  id: string;
+  userId: string;
+  storeName: string;
+  payoutEmail: string;
+  totalProducts: number;
+  totalSalesCents: number;
+  averageRating: number;
+  verificationStatus: VerificationStatus;
+}
+
+export interface CoachProfile {
+  id: string;
+  userId: string;
+  specialty: string;
+  hourlyRateCents: number;
+  bookingUrl?: string;
+  totalClients: number;
+  totalSessionsCompleted: number;
+  verificationStatus: VerificationStatus;
+}
+
+export interface BrandProfile {
+  id: string;
+  userId: string;
+  brandName: string;
+  legalEntityName: string;
+  industry: string;
+  officialWebsite: string;
+  productLinesCount: number;
+  partnershipTier: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE';
+  verificationStatus: VerificationStatus;
+}
 
 export interface AcademyProfile {
   id: string;
@@ -39,6 +93,9 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+  status?: AccountStatus;
+  passwordHash?: string;
+  salt?: string;
   avatarUrl: string;
   headline?: string;
   bio?: string;
@@ -48,6 +105,11 @@ export interface User {
   isEmailVerified: boolean;
   isActive: boolean;
   createdAt: string;
+  updatedAt?: string;
+  memberProfile?: MemberProfile;
+  sellerProfile?: SellerProfile;
+  coachProfile?: CoachProfile;
+  brandProfile?: BrandProfile;
   studentProfile?: StudentProfile;
   teacherProfile?: TeacherProfile;
   academyProfile?: AcademyProfile;

@@ -16,10 +16,20 @@ datasource db {
 // -------------------------------------------------------------
 
 enum UserRole {
+  MEMBER
+  SELLER
+  COACH
+  BRAND
   STUDENT
   TEACHER
   ACADEMY_ADMIN
   ADMIN
+}
+
+enum AccountStatus {
+  ACTIVE
+  PENDING_APPROVAL
+  SUSPENDED
 }
 
 enum VerificationStatus {
@@ -68,7 +78,9 @@ model User {
   email           String            @unique
   name            String
   passwordHash    String
-  role            UserRole          @default(STUDENT)
+  salt            String?
+  role            UserRole          @default(MEMBER)
+  status          AccountStatus     @default(ACTIVE)
   avatarUrl       String?
   isEmailVerified Boolean           @default(false)
   isActive        Boolean           @default(true)

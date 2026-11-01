@@ -34,7 +34,10 @@ import {
   Plus, 
   Trash2,
   Lock,
-  DollarSign
+  DollarSign,
+  Video,
+  Users,
+  Clock
 } from 'lucide-react';
 
 export default function ProfilePage() {
@@ -331,7 +334,16 @@ export default function ProfilePage() {
   }
 
   // Visual Theme mapping based on active role
-  const roleThemes = {
+  const roleThemes: Record<string, any> = {
+    MEMBER: {
+      title: 'Member Profile',
+      tagline: 'Learning Journey, XP, Streaks & Career Trajectory',
+      badgeBg: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+      badgeIcon: GraduationCap,
+      avatarBorder: 'ring-blue-500/40',
+      heroGrad: 'from-blue-600/10 via-indigo-500/5 to-transparent',
+      accentColor: 'text-blue-600 dark:text-blue-400',
+    },
     STUDENT: {
       title: 'Student Scholar Profile',
       tagline: 'Learning Journey, XP, Streaks & Career Trajectory',
@@ -341,6 +353,15 @@ export default function ProfilePage() {
       heroGrad: 'from-blue-600/10 via-indigo-500/5 to-transparent',
       accentColor: 'text-blue-600 dark:text-blue-400',
     },
+    SELLER: {
+      title: 'Merchant & Seller Studio Profile',
+      tagline: 'Store Catalog, Payout Routing & Merchant Reputation',
+      badgeBg: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      badgeIcon: Award,
+      avatarBorder: 'ring-emerald-500/40',
+      heroGrad: 'from-emerald-600/10 via-teal-500/5 to-transparent',
+      accentColor: 'text-emerald-600 dark:text-emerald-400',
+    },
     TEACHER: {
       title: 'Educator & Creator Studio Profile',
       tagline: 'Instructor Credential, Payout Accounts & Teaching Pedagogy',
@@ -349,6 +370,24 @@ export default function ProfilePage() {
       avatarBorder: 'ring-emerald-500/40',
       heroGrad: 'from-emerald-600/10 via-teal-500/5 to-transparent',
       accentColor: 'text-emerald-600 dark:text-emerald-400',
+    },
+    COACH: {
+      title: 'Master Coach & Mentor Profile',
+      tagline: '1-on-1 Consultations, Coaching Programs & Client Scheduling',
+      badgeBg: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+      badgeIcon: Video,
+      avatarBorder: 'ring-amber-500/40',
+      heroGrad: 'from-amber-600/10 via-orange-500/5 to-transparent',
+      accentColor: 'text-amber-600 dark:text-amber-400',
+    },
+    BRAND: {
+      title: 'Enterprise & Brand Partner Profile',
+      tagline: 'Brand Offerings, Corporate Accreditation & Certified Curricula',
+      badgeBg: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+      badgeIcon: Building2,
+      avatarBorder: 'ring-purple-500/40',
+      heroGrad: 'from-purple-600/10 via-pink-500/5 to-transparent',
+      accentColor: 'text-purple-600 dark:text-purple-400',
     },
     ACADEMY_ADMIN: {
       title: 'Enterprise Academy Portal Profile',
@@ -370,8 +409,8 @@ export default function ProfilePage() {
     },
   };
 
-  const currentTheme = roleThemes[user.role];
-  const BadgeIcon = currentTheme.badgeIcon;
+  const currentTheme = roleThemes[user.role] || roleThemes['MEMBER'];
+  const BadgeIcon = currentTheme.badgeIcon || GraduationCap;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-24 transition-colors">
@@ -399,8 +438,8 @@ export default function ProfilePage() {
 
           {/* Quick Persona Selector */}
           <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-xs overflow-x-auto max-w-full">
-            {(['STUDENT', 'TEACHER', 'ACADEMY_ADMIN', 'ADMIN'] as UserRole[]).map((r) => {
-              const isActive = user.role === r;
+            {(['MEMBER', 'SELLER', 'COACH', 'BRAND'] as UserRole[]).map((r) => {
+              const isActive = user.role === r || (r === 'MEMBER' && user.role === 'STUDENT') || (r === 'SELLER' && user.role === 'TEACHER') || (r === 'BRAND' && user.role === 'ACADEMY_ADMIN');
               return (
                 <button
                   key={r}
@@ -412,11 +451,11 @@ export default function ProfilePage() {
                   }`}
                 >
                   <span className={`w-2 h-2 rounded-full ${
-                    r === 'STUDENT' ? 'bg-blue-500' :
-                    r === 'TEACHER' ? 'bg-emerald-500' :
-                    r === 'ACADEMY_ADMIN' ? 'bg-purple-500' : 'bg-rose-500'
+                    r === 'MEMBER' ? 'bg-blue-500' :
+                    r === 'SELLER' ? 'bg-emerald-500' :
+                    r === 'COACH' ? 'bg-amber-500' : 'bg-purple-500'
                   }`}></span>
-                  <span>{r === 'ACADEMY_ADMIN' ? 'Academy' : r.charAt(0) + r.slice(1).toLowerCase()}</span>
+                  <span>{r.charAt(0) + r.slice(1).toLowerCase()}</span>
                 </button>
               );
             })}
@@ -611,9 +650,9 @@ export default function ProfilePage() {
             <div className="lg:col-span-2 space-y-6">
 
               {/* ------------------------------------------------------------- */}
-              {/* 1. STUDENT ROLE PROFILE PANEL */}
+              {/* 1. STUDENT / MEMBER ROLE PROFILE PANEL */}
               {/* ------------------------------------------------------------- */}
-              {user.role === 'STUDENT' && (
+              {(user.role === 'STUDENT' || user.role === 'MEMBER') && (
                 <div className="space-y-6">
                   {/* Student Metrics & Gamification */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -770,9 +809,9 @@ export default function ProfilePage() {
               )}
 
               {/* ------------------------------------------------------------- */}
-              {/* 2. TEACHER ROLE PROFILE PANEL */}
+              {/* 2. TEACHER / SELLER ROLE PROFILE PANEL */}
               {/* ------------------------------------------------------------- */}
-              {user.role === 'TEACHER' && (
+              {(user.role === 'TEACHER' || user.role === 'SELLER') && (
                 <div className="space-y-6">
                   {/* Financial & Earnings Ledger Overview */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -921,9 +960,90 @@ export default function ProfilePage() {
               )}
 
               {/* ------------------------------------------------------------- */}
-              {/* 3. ACADEMY ADMIN ROLE PROFILE PANEL */}
+              {/* 3. COACH ROLE PROFILE PANEL */}
               {/* ------------------------------------------------------------- */}
-              {user.role === 'ACADEMY_ADMIN' && (
+              {user.role === 'COACH' && (
+                <div className="space-y-6">
+                  {/* Coach Metrics */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                        <Users className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 font-medium">Mentored Clients</div>
+                        <div className="text-xl font-bold">{user.coachProfile?.totalClients || 48}</div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+                        <Clock className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 font-medium">Completed Sessions</div>
+                        <div className="text-xl font-bold">{user.coachProfile?.totalSessionsCompleted || 184}</div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                        <DollarSign className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 font-medium">Hourly Consultation</div>
+                        <div className="text-xl font-bold">${((user.coachProfile?.hourlyRateCents || 25000) / 100).toFixed(0)}/hr</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Coach Mentorship Settings */}
+                  <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                    <h3 className="font-bold text-base flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                      <Video className="w-4 h-4 text-amber-600" />
+                      <span>Coaching Practice &amp; Scheduling Integrations</span>
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                      <div>
+                        <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                          Mentorship Specialty
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={user.coachProfile?.specialty || 'Engineering Leadership & High-Scale Systems'}
+                          className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs border border-slate-200 dark:border-slate-700 font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                          Hourly Rate ($ USD)
+                        </label>
+                        <input
+                          type="number"
+                          defaultValue={((user.coachProfile?.hourlyRateCents || 25000) / 100)}
+                          className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs border border-slate-200 dark:border-slate-700 font-semibold"
+                        />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                          Calendar Booking URL (Calendly, Cal.com)
+                        </label>
+                        <input
+                          type="url"
+                          defaultValue={user.coachProfile?.bookingUrl || 'https://calendly.com/marcus-vance-leadership'}
+                          className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs border border-slate-200 dark:border-slate-700 font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ------------------------------------------------------------- */}
+              {/* 4. BRAND / ACADEMY ROLE PROFILE PANEL */}
+              {/* ------------------------------------------------------------- */}
+              {(user.role === 'ACADEMY_ADMIN' || user.role === 'BRAND') && (
                 <div className="space-y-6">
                   {/* Academy Institutional Metrics */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
