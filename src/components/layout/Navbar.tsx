@@ -480,14 +480,25 @@ export default function Navbar() {
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
               <span>{darkMode ? 'Light Theme' : 'Dark Theme'}</span>
             </button>
-            <Link
-              href="/teacher/dashboard"
-              onClick={() => setShowMobileMenu(false)}
-              className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
-            >
-              <span>Teacher Studio</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
+            {user ? (
+              <Link
+                href={getRoleInfo(user.role).dashboardPath}
+                onClick={() => setShowMobileMenu(false)}
+                className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
+              >
+                <span>{getRoleInfo(user.role).dashboardTitle}</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setShowMobileMenu(false)}
+                className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
+              >
+                <span>Sign In</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
           </div>
         </div>
       )}

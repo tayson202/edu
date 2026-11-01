@@ -303,6 +303,7 @@ export default function TeacherDashboardPage() {
           alert(`Syllabus generated for "${outline.title}" with ${outline.sections.length} modules! Redirecting to builder...`);
         }}
       />
+      </div>
     </ProtectedRoute>
   );
 }
