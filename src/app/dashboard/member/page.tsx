@@ -177,8 +177,8 @@ export default function MemberDashboardPage() {
             </h2>
             <p className="text-xs text-slate-500 mb-6">Manage your purchased products and financial invoices</p>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
+              <table className="w-full text-left text-xs min-w-[500px]">
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
                     <th className="pb-3 font-semibold">Order ID</th>

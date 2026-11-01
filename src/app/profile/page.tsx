@@ -464,44 +464,44 @@ export default function ProfilePage() {
       </div>
 
       {/* Main Profile Header Banner */}
-      <div className={`relative pt-10 pb-12 bg-gradient-to-b ${currentTheme.heroGrad} border-b border-slate-200/80 dark:border-slate-800`}>
+      <div className={`relative pt-8 sm:pt-10 pb-10 sm:pb-12 bg-gradient-to-b ${currentTheme.heroGrad} border-b border-slate-200/80 dark:border-slate-800`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="flex items-start md:items-center gap-5">
-              <div className="relative">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full md:w-auto">
+              <div className="relative shrink-0">
                 <img
                   src={avatarUrl || user.avatarUrl}
                   alt={user.name}
-                  className={`w-24 h-24 rounded-3xl object-cover shadow-xl ring-4 ${currentTheme.avatarBorder} bg-slate-200 dark:bg-slate-800`}
+                  className={`w-20 h-20 sm:w-24 sm:h-24 rounded-3xl object-cover shadow-xl ring-4 ${currentTheme.avatarBorder} bg-slate-200 dark:bg-slate-800`}
                 />
                 <span className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-emerald-500 text-white ring-2 ring-white dark:ring-slate-900" title="Account Verified">
                   <Check className="w-3.5 h-3.5 stroke-[3]" />
                 </span>
               </div>
-              <div className="space-y-1">
+              <div className="space-y-1.5 min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight truncate max-w-full">
                     {name || user.name}
                   </h1>
                   <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${currentTheme.badgeBg}`}>
                     {user.role.replace('_', ' ')}
                   </span>
                 </div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300 max-w-2xl">
+                <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 max-w-2xl line-clamp-2">
                   {headline || user.headline || currentTheme.tagline}
                 </p>
-                <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-500 dark:text-slate-400">
-                  <span className="flex items-center gap-1">
-                    <Mail className="w-3.5 h-3.5" /> {email || user.email}
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1 text-xs text-slate-500 dark:text-slate-400">
+                  <span className="flex items-center gap-1 truncate max-w-full">
+                    <Mail className="w-3.5 h-3.5 shrink-0" /> <span className="truncate">{email || user.email}</span>
                   </span>
                   {location && (
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5" /> {location}
+                      <MapPin className="w-3.5 h-3.5 shrink-0" /> {location}
                     </span>
                   )}
                   {websiteUrl && (
                     <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-brand-600 dark:text-brand-400 hover:underline">
-                      <Globe className="w-3.5 h-3.5" /> Website <ExternalLink className="w-3 h-3" />
+                      <Globe className="w-3.5 h-3.5 shrink-0" /> Website <ExternalLink className="w-3 h-3 shrink-0" />
                     </a>
                   )}
                 </div>
@@ -509,7 +509,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Quick Actions */}
-            <div className="flex items-center gap-2.5 self-end md:self-auto">
+            <div className="flex items-center gap-2.5 self-start sm:self-end md:self-auto shrink-0">
               <button
                 type="button"
                 onClick={handleReset}

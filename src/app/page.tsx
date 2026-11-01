@@ -76,26 +76,26 @@ export default function HomePage() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
               Master High-Impact Skills. <br className="hidden sm:block" />
               <span className="gradient-text">Teach Without Limits.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
               Connect directly with independent instructors and top academies. Stream interactive lessons, take auto-graded quizzes, attend live masterclasses, and learn with an AI personal tutor.
             </p>
 
             {/* Search Input Box */}
             <div className="pt-4 max-w-xl mx-auto">
               <form onSubmit={handleSearchSubmit} className="relative flex items-center shadow-glow">
-                <Search className="absolute left-4 w-5 h-5 text-slate-400" />
+                <Search className="absolute left-3.5 sm:left-4 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="What do you want to learn today? (e.g. Next.js, PyTorch, DevOps)"
-                  className="w-full pl-12 pr-32 py-3.5 text-sm sm:text-base rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-sm text-slate-900 dark:text-white"
+                  placeholder="What do you want to learn? (e.g. Next.js, AI, DevOps)"
+                  className="w-full pl-10 sm:pl-12 pr-24 sm:pr-32 py-3 sm:py-3.5 text-xs sm:text-base rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-sm text-slate-900 dark:text-white"
                 />
                 <button
                   type="submit"
