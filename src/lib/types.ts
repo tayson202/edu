@@ -113,6 +113,26 @@ export interface Quiz {
   questions: QuizQuestion[];
 }
 
+export interface QuizAnswer {
+  id: string;
+  attemptId: string;
+  questionId: string;
+  question: QuizQuestion;
+  optionId: string;
+  option: QuizOption;
+}
+
+export interface QuizAttempt {
+  id: string;
+  quizId: string;
+  userId: string;
+  score: number;
+  isPassed: boolean;
+  passed?: boolean;
+  completedAt: string;
+  answers?: QuizAnswer[];
+}
+
 export interface Assignment {
   id: string;
   courseId: string;

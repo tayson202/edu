@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -296,7 +296,7 @@ export default function CourseDetailPage() {
                     Course Curriculum
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {course.sections.length} sections ΓÇó {totalLessons} lessons ΓÇó {Math.round(course.totalDurationSecs / 60)} minutes total
+                    {course.sections.length} sections • {totalLessons} lessons • {Math.round(course.totalDurationSecs / 60)} minutes total
                   </p>
                 </div>
               </div>
@@ -396,7 +396,7 @@ export default function CourseDetailPage() {
                   <div className="text-xs text-brand-600 dark:text-brand-400 font-medium">{course.teacher.headline}</div>
                   <div className="flex items-center gap-4 text-xs text-slate-500 pt-1">
                     <span>Γÿà {course.teacher.ratingAvg.toFixed(2)} Instructor Rating</span>
-                    <span>ΓÇó</span>
+                    <span>•</span>
                     <span>{course.teacher.studentCount.toLocaleString()} Students</span>
                   </div>
                 </div>
@@ -430,7 +430,7 @@ export default function CourseDetailPage() {
                 {course.title}
               </div>
               <div className="text-xs text-slate-500">
-                Instructor: {course.teacher.name} ΓÇó Lifetime Access
+                Instructor: {course.teacher.name} • Lifetime Access
               </div>
             </div>
 

@@ -5,6 +5,8 @@ export async function generateStaticParams() {
     { id: 'course-ai-agents' },
     { id: 'course-nextjs-ai' },
     { id: 'course-deep-learning' },
+    { id: 'course-devops-k8s' },
+    { id: 'course-ui-ux-figma' },
   ];
 }
 

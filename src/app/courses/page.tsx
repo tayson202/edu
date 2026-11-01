@@ -7,7 +7,7 @@ import { loadState } from '@/lib/storage';
 import { Course, Category } from '@/lib/types';
 import CourseCard from '@/components/marketplace/CourseCard';
 
-export default function CoursesCatalogPage() {
+function CoursesCatalogContent() {
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
   const initialCategory = searchParams.get('category') || 'all';
@@ -235,5 +235,13 @@ export default function CoursesCatalogPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function CoursesCatalogPage() {
+  return (
+    <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Loading catalog...</div>}>
+      <CoursesCatalogContent />
+    </React.Suspense>
   );
 }

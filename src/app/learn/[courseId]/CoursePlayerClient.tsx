@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -483,7 +483,7 @@ export const workflow = new StateGraph(AgentState);`;
                 {/* Top-Left Lesson Tag Inset */}
                 <div className="absolute top-space-md left-space-md flex items-center gap-space-xs z-10">
                   <div className="px-space-sm py-1 rounded bg-inverse-surface/85 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm tracking-wider uppercase border border-outline/30">
-                    LESSON 1.1 ΓÇó LANGGRAPH & LCEL ARCHITECTURE
+                    LESSON 1.1 • LANGGRAPH & LCEL ARCHITECTURE
                   </div>
                   <div className="px-space-sm py-1 rounded bg-primary-container/90 backdrop-blur-md text-on-primary font-label-sm text-label-sm font-semibold">
                     Core Primitives
@@ -750,7 +750,7 @@ export const workflow = new StateGraph(AgentState);`;
                           <span className="w-3 h-3 rounded-full bg-tertiary-fixed-dim inline-block"></span>
                           <span className="w-3 h-3 rounded-full bg-secondary-fixed inline-block"></span>
                           <span className="ml-2 text-inverse-on-surface font-sans">
-                            orchestration-primitives.ts ΓÇó Node & State Definition
+                            orchestration-primitives.ts • Node & State Definition
                           </span>
                         </div>
                         <span className="text-secondary-fixed flex items-center gap-1">
@@ -788,7 +788,7 @@ export const workflow = new StateGraph(AgentState);`;
                       <div className="flex flex-wrap items-center gap-space-sm">
                         <div className="flex items-center gap-1.5 px-space-sm py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
                           <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-                          <span className="font-semibold">Pod #us-east-4 (Online ΓÇó 0.4 vCPU / 1.2 GB RAM)</span>
+                          <span className="font-semibold">Pod #us-east-4 (Online • 0.4 vCPU / 1.2 GB RAM)</span>
                         </div>
                         <div className="flex items-center gap-1 px-space-xs py-1 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
                           <span className="material-symbols-outlined text-[15px] text-tertiary">memory</span>
@@ -831,7 +831,7 @@ export const workflow = new StateGraph(AgentState);`;
                           <div className="p-space-sm rounded-lg bg-surface-container-lowest border border-surface-container-high shadow-sm flex flex-col gap-1">
                             <div className="flex items-center justify-between">
                               <span className="font-label-sm text-label-sm text-outline uppercase font-mono tracking-wider font-semibold">
-                                Node 1 ΓÇó Input Gateway
+                                Node 1 • Input Gateway
                               </span>
                               <span className="text-[11px] font-mono text-secondary flex items-center gap-0.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span> COMPLETED (42ms)
@@ -850,14 +850,14 @@ export const workflow = new StateGraph(AgentState);`;
                           <div className="p-space-sm rounded-lg bg-surface-container-lowest border border-primary text-on-surface shadow-sm flex flex-col gap-1 ring-1 ring-primary/20">
                             <div className="flex items-center justify-between">
                               <span className="font-label-sm text-label-sm text-primary uppercase font-mono tracking-wider font-bold">
-                                Node 2 ΓÇó agent_node (LLM)
+                                Node 2 • agent_node (LLM)
                               </span>
                               <span className="text-[11px] font-mono text-primary flex items-center gap-1 font-semibold">
                                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span> RUNNING (210ms)
                               </span>
                             </div>
                             <div className="text-body-sm text-body-sm font-mono text-on-surface bg-surface-container-low p-1.5 rounded text-xs">
-                              <span className="text-outline">Invoking:</span> claude-3-5-sonnet ΓÇó stream: true
+                              <span className="text-outline">Invoking:</span> claude-3-5-sonnet • stream: true
                             </div>
                           </div>
 
@@ -869,7 +869,7 @@ export const workflow = new StateGraph(AgentState);`;
                           <div className="p-space-sm rounded-lg bg-surface-container-lowest border border-surface-container-high opacity-70 flex flex-col gap-1">
                             <div className="flex items-center justify-between">
                               <span className="font-label-sm text-label-sm text-outline uppercase font-mono tracking-wider">
-                                Node 3 ΓÇó tools_condition ΓåÆ END
+                                Node 3 • tools_condition → END
                               </span>
                               <span className="text-[11px] font-mono text-outline font-semibold">QUEUED</span>
                             </div>
@@ -888,7 +888,7 @@ export const workflow = new StateGraph(AgentState);`;
                             <span className="w-3 h-3 rounded-full bg-tertiary-fixed-dim inline-block"></span>
                             <span className="w-3 h-3 rounded-full bg-secondary-fixed inline-block"></span>
                             <span className="ml-2 text-inverse-on-surface font-sans">
-                              bash ΓÇó /workspace/langgraph-orchestrator
+                              bash • /workspace/langgraph-orchestrator
                             </span>
                           </div>
                           <span className="text-secondary-fixed flex items-center gap-1">
@@ -896,7 +896,7 @@ export const workflow = new StateGraph(AgentState);`;
                           </span>
                         </div>
                         <div className="overflow-x-auto flex flex-col gap-1.5 py-1 text-[12px]">
-                          <p className="text-outline">ΓÜí Connected to dedicated sandbox pod [pod-edf-89241-langgraph] via WebSockets</p>
+                          <p className="text-outline">⚡ Connected to dedicated sandbox pod [pod-edf-89241-langgraph] via WebSockets</p>
                           <p className="text-secondary-fixed font-bold">$ tsc --noEmit &amp;&amp; node dist/orchestration-primitives.js</p>
                           <p className="text-on-tertiary-container">[TypeScript Engine] Compilation finished with 0 errors (144ms)</p>
                           <p className="text-primary-fixed-dim">[StateGraph] Initializing GraphInstance with AgentState reducer schema...</p>
@@ -927,7 +927,7 @@ export const workflow = new StateGraph(AgentState);`;
                           <span className="material-symbols-outlined text-[14px]">check</span>
                         </div>
                         <span className="font-label-md text-label-md text-on-surface">
-                          <strong className="text-secondary font-bold">1 Question resolved via Spark AI Instant Match</strong> ΓÇó Saved ~2 hours instructor reply queue
+                          <strong className="text-secondary font-bold">1 Question resolved via Spark AI Instant Match</strong> • Saved ~2 hours instructor reply queue
                         </span>
                       </div>
                       <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-surface-container-high text-primary font-semibold">
@@ -1037,11 +1037,11 @@ export const workflow = new StateGraph(AgentState);`;
                                     {thread.author.slice(0, 2).toUpperCase()}
                                   </div>
                                   <span className="font-semibold text-on-surface">{thread.author}</span>
-                                  <span className="text-outline">ΓÇó {thread.role}</span>
+                                  <span className="text-outline">• {thread.role}</span>
                                   <span className="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant text-[11px]">
                                     {thread.cohort}
                                   </span>
-                                  <span className="text-outline">ΓÇó {thread.timeAgo}</span>
+                                  <span className="text-outline">• {thread.timeAgo}</span>
                                   <span className="flex items-center gap-0.5 px-space-xs py-0.5 rounded bg-surface-container-high text-primary font-mono text-[11px]">
                                     <span className="material-symbols-outlined text-[12px]">schedule</span> {thread.timestamp}
                                   </span>
@@ -1168,7 +1168,7 @@ export const workflow = new StateGraph(AgentState);`;
                           <span className="material-symbols-outlined text-primary text-2xl">picture_as_pdf</span>
                           <div>
                             <div className="font-label-md font-semibold text-on-surface">LangGraph_Primitives_Architecture.pdf</div>
-                            <div className="text-[11px] text-outline">PDF ΓÇó 3.4 MB ΓÇó Updated Today</div>
+                            <div className="text-[11px] text-outline">PDF • 3.4 MB • Updated Today</div>
                           </div>
                         </div>
                         <button className="px-space-sm py-1 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface text-xs font-semibold">
@@ -1181,7 +1181,7 @@ export const workflow = new StateGraph(AgentState);`;
                           <span className="material-symbols-outlined text-secondary text-2xl">folder_zip</span>
                           <div>
                             <div className="font-label-md font-semibold text-on-surface">fullstack-ai-agents-starter.zip</div>
-                            <div className="text-[11px] text-outline">ZIP ΓÇó 12.8 MB ΓÇó TypeScript 5.4</div>
+                            <div className="text-[11px] text-outline">ZIP • 12.8 MB • TypeScript 5.4</div>
                           </div>
                         </div>
                         <button className="px-space-sm py-1 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface text-xs font-semibold">
@@ -1290,7 +1290,7 @@ export const workflow = new StateGraph(AgentState);`;
                 </div>
               </div>
 
-              {/* SECTION 2: Spark AI Tutor ΓÇö Grounded Assistant */}
+              {/* SECTION 2: Spark AI Tutor — Grounded Assistant */}
               <div className="bg-surface-container-lowest rounded-xl shadow-sm border border-surface-container-high p-space-md flex flex-col gap-space-sm flex-1">
                 
                 {/* Tutor Header with Sync Pill */}
@@ -1318,19 +1318,19 @@ export const workflow = new StateGraph(AgentState);`;
                     onClick={() => handleSendTutor('Explain Annotation.Root channels')}
                     className="prompt-chip px-space-xs py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-all text-left truncate max-w-full"
                   >
-                    ΓÇ£Explain Annotation.Root channelsΓÇ¥
+                    "Explain Annotation.Root channels"
                   </button>
                   <button
                     onClick={() => handleSendTutor('Why use custom reducers?')}
                     className="prompt-chip px-space-xs py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-all text-left truncate max-w-full"
                   >
-                    ΓÇ£Why use custom reducers?ΓÇ¥
+                    "Why use custom reducers?"
                   </button>
                   <button
                     onClick={() => handleSendTutor('How does message concatenation work?')}
                     className="prompt-chip px-space-xs py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-all text-left"
                   >
-                    ΓÇ£How does message concatenation work?ΓÇ¥
+                    "How does message concatenation work?"
                   </button>
                 </div>
 
@@ -1491,7 +1491,7 @@ export const workflow = new StateGraph(AgentState);`;
                   </h2>
                 </div>
                 <p className="font-body-sm text-body-sm text-on-surface-variant">
-                  Core Primitives & StateGraph ΓÇó Synced to current video playback
+                  Core Primitives & StateGraph • Synced to current video playback
                 </p>
               </div>
               <button
@@ -1698,7 +1698,7 @@ export const workflow = new StateGraph(AgentState);`;
       {/* 6. PLATFORM FOOTER */}
       <footer className="w-full bg-surface-container-low mt-space-xl py-space-lg border-t border-surface-container-high">
         <div className="max-w-7xl mx-auto px-margin flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm">
-          <div>┬⌐ 2025 EduFlow Technologies Inc. Enterprise Learning &amp; Upskilling.</div>
+          <div>© 2025 EduFlow Technologies Inc. Enterprise Learning &amp; Upskilling.</div>
           <div className="flex items-center gap-space-md font-label-md text-label-md">
             <a className="hover:text-on-surface transition-colors" href="#">Trust &amp; Security</a>
             <a className="hover:text-on-surface transition-colors" href="#">Compliance</a>

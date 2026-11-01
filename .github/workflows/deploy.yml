@@ -37,7 +37,9 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build Next.js Static Export
-        run: npm run build
+        run: |
+          npm run build
+          touch ./out/.nojekyll
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
