@@ -6,7 +6,8 @@ import {
   loadState, 
   getCurrentUser, 
   updateUserProfile, 
-  resetUserToDefault 
+  resetUserToDefault,
+  isUserAuthenticated
 } from '@/lib/storage';
 import { User, UserRole, VerificationStatus } from '@/lib/types';
 import { 
@@ -36,11 +37,13 @@ import {
   DollarSign,
   Video,
   Users,
-  Clock
+  Clock,
+  LogIn
 } from 'lucide-react';
 
 export default function ProfilePage() {
   const [mounted, setMounted] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -170,14 +173,27 @@ export default function ProfilePage() {
   useEffect(() => {
     setMounted(true);
     const state = loadState();
-    const curr = getCurrentUser(state);
-    setUser(curr);
-    populateFormData(curr);
+    const isAuth = isUserAuthenticated(state);
+    setAuthenticated(isAuth);
+    if (isAuth) {
+      const curr = getCurrentUser(state);
+      setUser(curr);
+      populateFormData(curr);
+    } else {
+      setUser(null);
+    }
 
     const onStateChange = () => {
       const s = loadState();
-      const updated = getCurrentUser(s);
-      setUser(updated);
+      const isAuthNow = isUserAuthenticated(s);
+      setAuthenticated(isAuthNow);
+      if (isAuthNow) {
+        const updated = getCurrentUser(s);
+        setUser(updated);
+        populateFormData(updated);
+      } else {
+        setUser(null);
+      }
     };
 
     window.addEventListener('ulearn_state_changed', onStateChange);
@@ -400,6 +416,48 @@ export default function ProfilePage() {
       accentColor: 'text-rose-600 dark:text-rose-400',
     },
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <div className="w-8 h-8 border-3 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!authenticated || !user) {
+    return (
+      <div className="min-h-[75vh] flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-950">
+        <div className="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 text-center shadow-xl space-y-4">
+          <div className="w-16 h-16 bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto border border-brand-200 dark:border-brand-800/60 shadow-xs">
+            <UserIcon className="w-8 h-8" />
+          </div>
+          <div className="inline-block px-3 py-1 bg-brand-100 dark:bg-brand-950/70 text-brand-700 dark:text-brand-300 text-xs font-bold rounded-full">
+            Guest (Student) Mode
+          </div>
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">No Active Profile</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+            You are currently exploring ULearn as a guest. Please log in or register an account to view and customize your verified profile, track your learning journey, and manage credentials.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <Link
+              href="/login?redirect=/profile"
+              className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition-all"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Sign In</span>
+            </Link>
+            <Link
+              href="/register"
+              className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm transition-all"
+            >
+              <span>Register</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const currentTheme = roleThemes[user.role] || roleThemes['MEMBER'];
   const BadgeIcon = currentTheme.badgeIcon || GraduationCap;

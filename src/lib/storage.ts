@@ -41,7 +41,7 @@ import {
   isValidEmail
 } from './crypto-auth';
 
-const STORAGE_KEY = 'ulearn_state_v2';
+const STORAGE_KEY = 'ulearn_state_v3';
 const CURRENT_USER_KEY = 'ulearn_current_user_id';
 
 export interface AppState {
@@ -67,8 +67,8 @@ export interface AppState {
 function getInitialState(): AppState {
   return {
     users: initialUsers,
-    currentUserId: 'usr-student', // default to student for interactive exploration as guest
-    isAuthenticated: true,
+    currentUserId: '', // Guest has no user profile
+    isAuthenticated: false, // Default visitor enters as a Guest
     hasExplicitLogin: false,
     categories: initialCategories,
     courses: initialCourses,
@@ -91,11 +91,12 @@ export function loadState(): AppState {
   }
 
   try {
-    // Clear legacy v1 state if present to guarantee initial guest role is Student
+    // Clear legacy v1 and v2 state if present to guarantee initial guest mode
     if (localStorage.getItem('ulearn_state_v1')) {
-      try {
-        localStorage.removeItem('ulearn_state_v1');
-      } catch (e) {}
+      try { localStorage.removeItem('ulearn_state_v1'); } catch (e) {}
+    }
+    if (localStorage.getItem('ulearn_state_v2')) {
+      try { localStorage.removeItem('ulearn_state_v2'); } catch (e) {}
     }
 
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -119,13 +120,13 @@ export function loadState(): AppState {
     if (combinedState.sessionExpiry && Date.now() > combinedState.sessionExpiry) {
       combinedState.isAuthenticated = false;
       combinedState.hasExplicitLogin = false;
-      combinedState.currentUserId = 'usr-student';
+      combinedState.currentUserId = '';
     }
 
-    // Default to student guest if the current user is missing or was a legacy default teacher
-    const current = combinedState.users.find(u => u.id === combinedState.currentUserId);
-    if (!current || ((current.id === 'usr-seller' || current.id === 'usr-coach' || current.id === 'usr-teacher-sarah') && !combinedState.hasExplicitLogin)) {
-      combinedState.currentUserId = 'usr-student';
+    // Default to guest (unauthenticated) if user hasn't explicitly logged in
+    if (!combinedState.hasExplicitLogin) {
+      combinedState.isAuthenticated = false;
+      combinedState.currentUserId = '';
     }
 
     return combinedState;
@@ -150,8 +151,10 @@ export function saveState(state: AppState): void {
 // -------------------------------------------------------------
 
 export function getCurrentUser(state: AppState): User {
-  const user = state.users.find(u => u.id === state.currentUserId);
-  if (user) return user;
+  if (state.currentUserId) {
+    const user = state.users.find(u => u.id === state.currentUserId);
+    if (user) return user;
+  }
   const defaultStudent = state.users.find(u => u.role === 'STUDENT');
   return defaultStudent || state.users[0];
 }

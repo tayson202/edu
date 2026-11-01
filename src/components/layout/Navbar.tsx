@@ -229,7 +229,15 @@ export default function Navbar() {
                   );
                 })()}
               </>
-            ) : null}
+            ) : (
+              <div 
+                className="hidden sm:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold border bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700"
+                title="Browsing in Student Guest Mode"
+              >
+                <GraduationCap className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
+                <span>Guest</span>
+              </div>
+            )}
 
             {/* Notifications Menu */}
             <div className="relative">
@@ -481,7 +489,7 @@ export default function Navbar() {
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
               <span>{darkMode ? 'Light Theme' : 'Dark Theme'}</span>
             </button>
-            {user ? (
+            {authenticated && user ? (
               <Link
                 href={getRoleInfo(user.role).dashboardPath}
                 onClick={() => setShowMobileMenu(false)}
