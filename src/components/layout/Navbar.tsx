@@ -20,10 +20,12 @@ import {
   Award,
   Video,
   LogOut,
+  LogIn,
+  ArrowRight,
   Moon,
   Sun
 } from 'lucide-react';
-import { loadState, switchUser, getCurrentUser } from '@/lib/storage';
+import { loadState, switchUser, getCurrentUser, logoutUser, isUserAuthenticated } from '@/lib/storage';
 import { UserRole } from '@/lib/types';
 
 export default function Navbar() {
@@ -31,6 +33,7 @@ export default function Navbar() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState(() => getCurrentUser(loadState()));
+  const [authenticated, setAuthenticated] = useState(() => isUserAuthenticated(loadState()));
   const [notifications, setNotifications] = useState(() => loadState().notifications);
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
@@ -43,6 +46,7 @@ export default function Navbar() {
     const syncState = () => {
       const state = loadState();
       setUser(getCurrentUser(state));
+      setAuthenticated(isUserAuthenticated(state));
       setNotifications(state.notifications);
     };
 
@@ -143,7 +147,17 @@ export default function Navbar() {
           </div>
 
           {/* Right Action Elements: Role Switcher, Notifications, Theme, User */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+
+            {/* Dedicated Role Login Gateway Button */}
+            <Link
+              href="/login"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-brand-600 dark:hover:text-brand-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-colors shadow-xs"
+              title="Role-Based Authentication Gateway"
+            >
+              <LogIn className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
+              <span>Role Login</span>
+            </Link>
             
             {/* RBAC Role Switcher Badge */}
             <div className="relative">
@@ -214,6 +228,28 @@ export default function Navbar() {
                       <div className="text-[11px] text-slate-400">Ledger, approvals, commission settings</div>
                     </div>
                   </button>
+
+                  <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs px-2 pb-1">
+                    <Link
+                      href="/login"
+                      onClick={() => setShowRoleMenu(false)}
+                      className="text-brand-600 dark:text-brand-400 font-bold hover:underline flex items-center gap-1"
+                    >
+                      <LogIn className="w-3.5 h-3.5" />
+                      <span>Dedicated Login</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logoutUser();
+                        setShowRoleMenu(false);
+                        router.push('/login');
+                      }}
+                      className="text-rose-600 dark:text-rose-400 font-semibold hover:underline flex items-center gap-1"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Log Out</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -345,10 +381,21 @@ export default function Navbar() {
             <Link 
               href="/profile" 
               onClick={() => setShowMobileMenu(false)}
-              className="col-span-2 p-2.5 rounded-xl bg-brand-50 dark:bg-brand-950/50 text-sm font-bold text-brand-700 dark:text-brand-300 flex items-center gap-2 border border-brand-200 dark:border-brand-800"
+              className="p-2.5 rounded-xl bg-brand-50 dark:bg-brand-950/50 text-xs font-bold text-brand-700 dark:text-brand-300 flex items-center gap-2 border border-brand-200 dark:border-brand-800"
             >
-              <UserIcon className="w-4 h-4 text-brand-600" />
-              <span>Role Profile ({user.role.replace('_', ' ')})</span>
+              <UserIcon className="w-3.5 h-3.5 text-brand-600" />
+              <span>Profile ({user.role.replace('_', ' ')})</span>
+            </Link>
+            <Link 
+              href="/login" 
+              onClick={() => setShowMobileMenu(false)}
+              className="p-2.5 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-bold flex items-center justify-between shadow-xs"
+            >
+              <div className="flex items-center gap-1.5">
+                <LogIn className="w-3.5 h-3.5 text-brand-400 dark:text-brand-600" />
+                <span>Role Login</span>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link 
               href="/courses" 

@@ -40,6 +40,7 @@ const CURRENT_USER_KEY = 'ulearn_current_user_id';
 export interface AppState {
   users: User[];
   currentUserId: string;
+  isAuthenticated: boolean;
   categories: Category[];
   courses: Course[];
   enrollments: CourseEnrollment[];
@@ -58,6 +59,7 @@ function getInitialState(): AppState {
   return {
     users: initialUsers,
     currentUserId: 'usr-student', // default to student for interactive exploration
+    isAuthenticated: true,
     categories: initialCategories,
     courses: initialCourses,
     enrollments: initialEnrollments,
@@ -117,10 +119,43 @@ export function switchUser(role: UserRole): User {
   const targetUser = state.users.find(u => u.role === role);
   if (targetUser) {
     state.currentUserId = targetUser.id;
+    state.isAuthenticated = true;
     saveState(state);
     return targetUser;
   }
   return state.users[0];
+}
+
+export function isUserAuthenticated(state?: AppState): boolean {
+  const s = state || loadState();
+  return s.isAuthenticated ?? true;
+}
+
+export function loginUser(email: string, role?: UserRole): { success: boolean; user?: User; error?: string } {
+  const state = loadState();
+  let user: User | undefined;
+  if (email && email.trim()) {
+    user = state.users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
+  }
+  if (!user && role) {
+    user = state.users.find(u => u.role === role);
+  }
+  if (!user) {
+    return { 
+      success: false, 
+      error: 'No account found matching this email. Select one of the quick demo personas below to log in instantly.' 
+    };
+  }
+  state.currentUserId = user.id;
+  state.isAuthenticated = true;
+  saveState(state);
+  return { success: true, user };
+}
+
+export function logoutUser(): void {
+  const state = loadState();
+  state.isAuthenticated = false;
+  saveState(state);
 }
 
 export function updateUserProfile(userId: string, updates: Partial<User>): User {
