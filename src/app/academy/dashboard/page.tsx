@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { loadState, getCurrentUser } from '@/lib/storage';
 import { Course } from '@/lib/types';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function AcademyDashboardPage() {
   const [mounted, setMounted] = useState(false);
@@ -85,8 +86,9 @@ export default function AcademyDashboardPage() {
   const totalOrgStudents = instructors.reduce((acc, i) => acc + i.students, 0);
 
   return (
-    <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <ProtectedRoute allowedRole="ACADEMY" dashboardTitle="Academy Portal">
+      <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -322,6 +324,7 @@ export default function AcademyDashboardPage() {
         </div>
       )}
 
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }

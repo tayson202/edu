@@ -192,8 +192,8 @@ export async function registerUser(input: RegisterUserInput): Promise<{ success:
   const salt = generateSalt();
   const passwordHash = await hashPassword(password, salt);
   
-  // Seller, Coach, and Brand accounts start with PENDING_APPROVAL for business features
-  const isBusinessRole = role === 'SELLER' || role === 'COACH' || role === 'BRAND';
+  // Teacher and Academy accounts start with PENDING_APPROVAL for verification
+  const isBusinessRole = role === 'TEACHER' || role === 'ACADEMY' || role === 'SELLER' || role === 'COACH' || role === 'BRAND';
   const status = isBusinessRole ? 'PENDING_APPROVAL' : 'ACTIVE';
 
   const newUser: User = {
@@ -205,7 +205,7 @@ export async function registerUser(input: RegisterUserInput): Promise<{ success:
     salt,
     passwordHash,
     avatarUrl: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80`,
-    headline: `${role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()} Member at ULearn`,
+    headline: `${role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()} Account at ULearn`,
     bio: `Active ${role.toLowerCase()} account created on ${new Date().toLocaleDateString()}.`,
     isEmailVerified: true,
     isActive: true,
@@ -213,46 +213,55 @@ export async function registerUser(input: RegisterUserInput): Promise<{ success:
     updatedAt: new Date().toISOString(),
   };
 
-  if (role === 'MEMBER') {
+  if (role === 'STUDENT' || role === 'MEMBER') {
+    newUser.studentProfile = {
+      id: `sp-${Date.now()}`,
+      userId: newUser.id,
+      headline: `${name.trim()} - Dedicated Learner`,
+      bio: 'Student pursuing technical mastery on ULearn.',
+      interests: ['Web Development', 'Artificial Intelligence', 'Cloud Engineering'],
+      learningPoints: 100,
+      streakDays: 1,
+      badges: ['New Scholar'],
+    };
     newUser.memberProfile = {
       id: `mp-${Date.now()}`,
       userId: newUser.id,
-      interests: ['General Learning'],
-      learningGoals: ['Explore marketplace programs & products'],
+      interests: ['Web Development', 'Artificial Intelligence'],
+      learningGoals: ['Complete certification tracks'],
       ordersCount: 0,
       enrolledProgramsCount: 0,
     };
-  } else if (role === 'SELLER') {
-    newUser.sellerProfile = {
-      id: `slp-${Date.now()}`,
+  } else if (role === 'TEACHER' || role === 'SELLER' || role === 'COACH') {
+    newUser.teacherProfile = {
+      id: `tp-${Date.now()}`,
       userId: newUser.id,
-      storeName: `${name.trim()}'s Digital Studio`,
-      payoutEmail: email.trim().toLowerCase(),
-      totalProducts: 0,
-      totalSalesCents: 0,
-      averageRating: 5.0,
+      user: null as any,
+      headline: `${name.trim()} - Course Instructor`,
+      bio: 'Educator creating courses and curriculum on ULearn.',
+      expertise: ['Curriculum Engineering'],
+      experienceYears: 1,
       verificationStatus: 'PENDING',
+      totalEarningsCents: 0,
+      pendingBalanceCents: 0,
+      payoutConfig: {
+        method: 'BANK_TRANSFER',
+        accountDetails: 'Pending verification',
+      },
     };
-  } else if (role === 'COACH') {
-    newUser.coachProfile = {
-      id: `cp-${Date.now()}`,
+  } else if (role === 'ACADEMY' || role === 'ACADEMY_ADMIN' || role === 'BRAND') {
+    newUser.academyProfile = {
+      id: `ap-${Date.now()}`,
       userId: newUser.id,
-      specialty: 'Professional Coaching & Mentorship',
-      hourlyRateCents: 15000,
-      totalClients: 0,
-      totalSessionsCompleted: 0,
-      verificationStatus: 'PENDING',
-    };
-  } else if (role === 'BRAND') {
-    newUser.brandProfile = {
-      id: `bp-${Date.now()}`,
-      userId: newUser.id,
-      brandName: `${name.trim()} Brand Solutions`,
-      legalEntityName: `${name.trim()} LLC`,
-      industry: 'Enterprise Technology & Education',
-      officialWebsite: 'https://ulearn.com',
-      productLinesCount: 0,
-      partnershipTier: 'STANDARD',
+      academyName: `${name.trim()} Academy`,
+      headline: 'Enterprise Educational Institute',
+      bio: 'Academy administering cohorts, certifications, and multi-instructor training on ULearn.',
+      accreditation: 'Under Verification',
+      campusLocation: 'Online Campus',
+      websiteUrl: 'https://ulearn.com',
+      contactEmail: email.trim().toLowerCase(),
+      establishedYear: new Date().getFullYear(),
+      totalStudents: 0,
       verificationStatus: 'PENDING',
     };
   }
@@ -384,41 +393,44 @@ export function approveUser(userId: string): { success: boolean; error?: string 
  */
 export function getUserRoleDashboard(role: UserRole): string {
   switch (role) {
-    case 'MEMBER':
     case 'STUDENT':
-      return '/dashboard/member';
-    case 'SELLER':
+    case 'MEMBER':
+      return '/my-learning';
     case 'TEACHER':
-      return '/dashboard/seller';
+    case 'SELLER':
     case 'COACH':
-      return '/dashboard/coach';
-    case 'BRAND':
+      return '/teacher/dashboard';
+    case 'ACADEMY':
     case 'ACADEMY_ADMIN':
-      return '/dashboard/brand';
+    case 'BRAND':
+      return '/academy/dashboard';
     case 'ADMIN':
       return '/admin/dashboard';
     default:
-      return '/dashboard/member';
+      return '/my-learning';
   }
 }
 
 /**
  * Validates whether a user's role grants access to a specific dashboard
  */
-export function canAccessDashboard(userRole: UserRole, targetDashboard: 'MEMBER' | 'SELLER' | 'COACH' | 'BRAND' | 'ADMIN'): boolean {
+export function canAccessDashboard(
+  userRole: UserRole, 
+  targetDashboard: 'STUDENT' | 'TEACHER' | 'ACADEMY' | 'ADMIN' | 'MEMBER' | 'SELLER' | 'COACH' | 'BRAND'
+): boolean {
   if (userRole === 'ADMIN') return true; // Platform Administrator can inspect all dashboards
   
-  if (targetDashboard === 'MEMBER') {
-    return userRole === 'MEMBER' || userRole === 'STUDENT';
+  if (targetDashboard === 'STUDENT' || targetDashboard === 'MEMBER') {
+    return userRole === 'STUDENT' || userRole === 'MEMBER';
   }
-  if (targetDashboard === 'SELLER') {
-    return userRole === 'SELLER' || userRole === 'TEACHER';
+  if (targetDashboard === 'TEACHER' || targetDashboard === 'SELLER' || targetDashboard === 'COACH') {
+    return userRole === 'TEACHER' || userRole === 'SELLER' || userRole === 'COACH';
   }
-  if (targetDashboard === 'COACH') {
-    return userRole === 'COACH';
+  if (targetDashboard === 'ACADEMY' || targetDashboard === 'ACADEMY_ADMIN' || targetDashboard === 'BRAND') {
+    return userRole === 'ACADEMY' || userRole === 'ACADEMY_ADMIN' || userRole === 'BRAND';
   }
-  if (targetDashboard === 'BRAND') {
-    return userRole === 'BRAND' || userRole === 'ACADEMY_ADMIN';
+  if (targetDashboard === 'ADMIN') {
+    return userRole === 'ADMIN';
   }
   return false;
 }

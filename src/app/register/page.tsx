@@ -20,11 +20,13 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  UserCheck
+  UserCheck,
+  GraduationCap,
+  Award
 } from 'lucide-react';
 
 const ROLE_OPTIONS: {
-  role: 'MEMBER' | 'SELLER' | 'COACH' | 'BRAND';
+  role: 'STUDENT' | 'TEACHER' | 'ACADEMY';
   title: string;
   badge: string;
   icon: any;
@@ -34,44 +36,34 @@ const ROLE_OPTIONS: {
   features: string[];
 }[] = [
   {
-    role: 'MEMBER',
-    title: 'Member Account',
+    role: 'STUDENT',
+    title: 'Student Account',
     badge: 'Individual Learner',
-    icon: UserIcon,
+    icon: GraduationCap,
     color: 'text-blue-600 dark:text-blue-400',
     bgLight: 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-900',
-    description: 'Browse premium products, enroll in coaching programs, and manage your learning progress.',
-    features: ['Access member-only products', 'Enrolled courses & certificates', 'Direct messaging with instructors'],
+    description: 'Learn modern tech skills, stream video courses, practice with AI tutor, and earn verified certificates.',
+    features: ['Access full course catalog', 'AI study assistant & quizzes', 'Official verified certificates'],
   },
   {
-    role: 'SELLER',
-    title: 'Seller Account',
-    badge: 'Creator & Merchant',
-    icon: ShoppingBag,
+    role: 'TEACHER',
+    title: 'Teacher Account',
+    badge: 'Instructor & Creator',
+    icon: Award,
     color: 'text-emerald-600 dark:text-emerald-400',
     bgLight: 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900',
-    description: 'Publish and sell your digital courses, blueprints, software templates, and track sales revenue.',
-    features: ['Product creation studio', 'Sales analytics & payouts', 'Buyer order management'],
+    description: 'Publish your courses, design curriculum, track student progress, and earn 85% revenue payouts.',
+    features: ['Course builder & AI generator', 'Sales ledger & analytics', '85% revenue payouts'],
   },
   {
-    role: 'COACH',
-    title: 'Coach Account',
-    badge: 'Mentor & Trainer',
-    icon: Video,
-    color: 'text-amber-600 dark:text-amber-400',
-    bgLight: 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-900',
-    description: 'Host 1-on-1 coaching sessions, cohort bootcamps, and manage your personal client calendar.',
-    features: ['1-on-1 booking calendar', 'Client session notes', 'Subscription management'],
-  },
-  {
-    role: 'BRAND',
-    title: 'Brand Account',
-    badge: 'Enterprise & Academy',
+    role: 'ACADEMY',
+    title: 'Academy Account',
+    badge: 'Institution & Enterprise',
     icon: Building2,
     color: 'text-purple-600 dark:text-purple-400',
     bgLight: 'bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-900',
-    description: 'Manage institutional offerings, brand-certified curriculum, enterprise teams, and multi-instructor catalogs.',
-    features: ['Multi-instructor catalog', 'Enterprise contracts', 'Brand certification badges'],
+    description: 'Deliver accredited academic programs, corporate training cohorts, and manage multiple instructors.',
+    features: ['Multi-instructor cohorts', 'Accredited campus credentials', 'Corporate team licensing'],
   },
 ];
 
@@ -83,7 +75,7 @@ function RegisterContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [selectedRole, setSelectedRole] = useState<'MEMBER' | 'SELLER' | 'COACH' | 'BRAND'>('MEMBER');
+  const [selectedRole, setSelectedRole] = useState<'STUDENT' | 'TEACHER' | 'ACADEMY'>('STUDENT');
   
   // UI States
   const [showPassword, setShowPassword] = useState(false);
@@ -184,7 +176,7 @@ function RegisterContent() {
                 1. Select Account Type <span className="text-rose-500">*</span>
               </label>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {ROLE_OPTIONS.map((item) => {
                   const Icon = item.icon;
                   const isSelected = selectedRole === item.role;
@@ -216,7 +208,7 @@ function RegisterContent() {
                       </div>
 
                       <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 text-[10px] text-slate-400 font-medium">
-                        {item.role === 'MEMBER' ? 'Instant Activation' : 'Business Approval Workflow'}
+                        {item.role === 'STUDENT' ? 'Instant Learner Activation' : 'Instructor / Partner Review'}
                       </div>
                     </button>
                   );

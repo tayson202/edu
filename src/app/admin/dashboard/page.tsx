@@ -24,6 +24,7 @@ import {
   updatePlatformCommission 
 } from '@/lib/storage';
 import { PlatformSetting, TeacherPayout, AuditLog, User } from '@/lib/types';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function AdminDashboardPage() {
   const [mounted, setMounted] = useState(false);
@@ -71,8 +72,9 @@ export default function AdminDashboardPage() {
   const studentsCount = users.filter(u => u.role === 'STUDENT').length;
 
   return (
-    <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <ProtectedRoute allowedRole="ADMIN" dashboardTitle="Platform Admin">
+      <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -299,7 +301,8 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

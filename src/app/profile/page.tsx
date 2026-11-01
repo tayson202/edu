@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { 
   loadState, 
   getCurrentUser, 
-  switchUser, 
   updateUserProfile, 
   resetUserToDefault 
 } from '@/lib/storage';
@@ -184,13 +183,6 @@ export default function ProfilePage() {
     window.addEventListener('ulearn_state_changed', onStateChange);
     return () => window.removeEventListener('ulearn_state_changed', onStateChange);
   }, []);
-
-  const handleRoleSwitch = (role: UserRole) => {
-    const switched = switchUser(role);
-    setUser(switched);
-    populateFormData(switched);
-    showToast(`Switched active persona to ${role.replace('_', ' ')}`);
-  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -423,42 +415,22 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Role Switcher Bar - Prominent Role Separation Control */}
+      {/* Authenticated Role Indicator Bar (Locked to Login) */}
       <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-16 z-30 py-3 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Active Persona:
+              Authenticated Role:
             </span>
-            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${currentTheme.badgeBg}`}>
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${currentTheme.badgeBg}`}>
               <BadgeIcon className="w-3.5 h-3.5" />
-              <span>{user.role.replace('_', ' ')}</span>
+              <span>{user.role === 'MEMBER' ? 'Student' : user.role === 'SELLER' || user.role === 'COACH' ? 'Teacher' : user.role === 'ACADEMY_ADMIN' || user.role === 'BRAND' ? 'Academy' : user.role.charAt(0) + user.role.slice(1).toLowerCase()}</span>
             </span>
           </div>
 
-          {/* Quick Persona Selector */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-xs overflow-x-auto max-w-full">
-            {(['MEMBER', 'SELLER', 'COACH', 'BRAND'] as UserRole[]).map((r) => {
-              const isActive = user.role === r || (r === 'MEMBER' && user.role === 'STUDENT') || (r === 'SELLER' && user.role === 'TEACHER') || (r === 'BRAND' && user.role === 'ACADEMY_ADMIN');
-              return (
-                <button
-                  key={r}
-                  onClick={() => handleRoleSwitch(r)}
-                  className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm ring-1 ring-slate-900/10'
-                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  <span className={`w-2 h-2 rounded-full ${
-                    r === 'MEMBER' ? 'bg-blue-500' :
-                    r === 'SELLER' ? 'bg-emerald-500' :
-                    r === 'COACH' ? 'bg-amber-500' : 'bg-purple-500'
-                  }`}></span>
-                  <span>{r.charAt(0) + r.slice(1).toLowerCase()}</span>
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+            <Lock className="w-3.5 h-3.5 text-slate-400" />
+            <span>Role locked to authenticated account. Access other roles by logging into that account.</span>
           </div>
         </div>
       </div>

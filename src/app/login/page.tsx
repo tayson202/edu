@@ -37,48 +37,48 @@ import {
 
 const QUICK_PERSONAS = [
   {
-    role: 'MEMBER' as UserRole,
+    role: 'STUDENT' as UserRole,
     name: 'Alex Morgan',
-    email: 'member@example.com',
-    title: 'Member Account',
+    email: 'student@example.com',
+    title: 'Student Account',
     badge: 'Individual Learner',
     icon: GraduationCap,
     color: 'text-blue-600 dark:text-blue-400',
     bg: 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-900',
-    desc: 'Browse marketplace, enroll in courses & coaching, track learning.',
+    desc: 'Browse catalog, stream courses, practice with AI tutor, track learning.',
   },
   {
-    role: 'SELLER' as UserRole,
+    role: 'TEACHER' as UserRole,
     name: 'Dr. Sarah Chen',
-    email: 'seller@example.com',
-    title: 'Seller Account',
-    badge: 'Creator & Merchant',
-    icon: ShoppingBag,
+    email: 'teacher@example.com',
+    title: 'Teacher Account',
+    badge: 'Instructor & Creator',
+    icon: Award,
     color: 'text-emerald-600 dark:text-emerald-400',
     bg: 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900',
-    desc: 'Manage courses, digital products, orders, and sales revenue.',
+    desc: 'Manage courses, student analytics, sales ledger, and 85% payouts.',
   },
   {
-    role: 'COACH' as UserRole,
-    name: 'Marcus Vance',
-    email: 'coach@example.com',
-    title: 'Coach Account',
-    badge: 'Mentor & Trainer',
-    icon: Video,
-    color: 'text-amber-600 dark:text-amber-400',
-    bg: 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-900',
-    desc: 'Manage 1-on-1 coaching, sessions, client calendar & bookings.',
-  },
-  {
-    role: 'BRAND' as UserRole,
-    name: 'Apex Enterprise Brand',
-    email: 'brand@example.com',
-    title: 'Brand Account',
-    badge: 'Enterprise & Academy',
+    role: 'ACADEMY' as UserRole,
+    name: 'Apex Academy Admin',
+    email: 'academy@example.com',
+    title: 'Academy Account',
+    badge: 'Enterprise & Institute',
     icon: Building2,
     color: 'text-purple-600 dark:text-purple-400',
     bg: 'bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-900',
-    desc: 'Institutional offers, enterprise team catalogs, brand profile.',
+    desc: 'Campus cohorts, multi-instructor management, accreditation.',
+  },
+  {
+    role: 'ADMIN' as UserRole,
+    name: 'Elena Vance',
+    email: 'admin@example.com',
+    title: 'Admin Account',
+    badge: 'Platform Director',
+    icon: ShieldCheck,
+    color: 'text-rose-600 dark:text-rose-400',
+    bg: 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900',
+    desc: 'Platform governance, ledger audits, verification, and security clearance.',
   },
 ];
 
@@ -421,7 +421,7 @@ function LoginContent() {
               <div className="text-center text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
                 New to the platform?{' '}
                 <Link href="/register" className="font-bold text-brand-600 dark:text-brand-400 hover:underline">
-                  Create a Member, Seller, Coach, or Brand Account
+                  Create a Student, Teacher, or Academy Account
                 </Link>
               </div>
 

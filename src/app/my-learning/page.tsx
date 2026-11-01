@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { loadState, getCurrentUser } from '@/lib/storage';
 import { CourseEnrollment, Certificate, LiveBooking, LiveSession } from '@/lib/types';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function MyLearningPage() {
   const [mounted, setMounted] = useState(false);
@@ -47,8 +48,9 @@ export default function MyLearningPage() {
   const completed = enrollments.filter(e => e.progressPercent >= 100);
 
   return (
-    <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <ProtectedRoute allowedRole="STUDENT" dashboardTitle="Student Learning Portal">
+      <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* 1. STUDENT PROFILE & GAMIFICATION BANNER */}
         <div className="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -345,7 +347,8 @@ export default function MyLearningPage() {
           </div>
         )}
 
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

@@ -1,15 +1,15 @@
 // Shared TypeScript Type Definitions for ULearn Marketplace
 
 export type UserRole = 
+  | 'STUDENT' 
+  | 'TEACHER' 
+  | 'ACADEMY' 
+  | 'ADMIN'
   | 'MEMBER' 
   | 'SELLER' 
   | 'COACH' 
   | 'BRAND' 
-  // Legacy aliases for backward compatibility
-  | 'STUDENT' 
-  | 'TEACHER' 
-  | 'ACADEMY_ADMIN' 
-  | 'ADMIN';
+  | 'ACADEMY_ADMIN';
 
 export type AccountStatus = 'ACTIVE' | 'PENDING_APPROVAL' | 'SUSPENDED';
 export type VerificationStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';

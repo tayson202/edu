@@ -9,7 +9,7 @@ import { ShieldAlert, ArrowRight, LogIn, Lock, CheckCircle2 } from 'lucide-react
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedRole: 'MEMBER' | 'SELLER' | 'COACH' | 'BRAND' | 'ADMIN';
+  allowedRole: 'STUDENT' | 'TEACHER' | 'ACADEMY' | 'ADMIN' | 'MEMBER' | 'SELLER' | 'COACH' | 'BRAND';
   dashboardTitle: string;
 }
 

@@ -23,6 +23,7 @@ import {
 import { loadState, getCurrentUser } from '@/lib/storage';
 import { Course, TransactionLedger, TeacherPayout } from '@/lib/types';
 import AICourseGeneratorModal from '@/components/ai/AICourseGeneratorModal';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function TeacherDashboardPage() {
   const [mounted, setMounted] = useState(false);
@@ -56,8 +57,9 @@ export default function TeacherDashboardPage() {
   const totalStudents = courses.reduce((acc, c) => acc + (c.studentCount || 0), 0);
 
   return (
-    <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <ProtectedRoute allowedRole="TEACHER" dashboardTitle="Teacher Studio">
+      <div className="flex-1 py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* 1. STUDIO HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -291,7 +293,6 @@ export default function TeacherDashboardPage() {
             </div>
           </div>
         </div>
-
       </div>
 
       {/* AI Course Generator Modal */}
@@ -302,6 +303,6 @@ export default function TeacherDashboardPage() {
           alert(`Syllabus generated for "${outline.title}" with ${outline.sections.length} modules! Redirecting to builder...`);
         }}
       />
-    </div>
+    </ProtectedRoute>
   );
 }

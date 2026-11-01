@@ -26,8 +26,58 @@ import {
   Moon,
   Sun
 } from 'lucide-react';
-import { loadState, switchUser, getCurrentUser, logoutUser, isUserAuthenticated, getUserRoleDashboard } from '@/lib/storage';
+import { loadState, getCurrentUser, logoutUser, isUserAuthenticated, getUserRoleDashboard } from '@/lib/storage';
 import { UserRole } from '@/lib/types';
+
+const getRoleInfo = (role: UserRole) => {
+  switch (role) {
+    case 'STUDENT':
+    case 'MEMBER':
+      return {
+        label: 'Student',
+        dashboardPath: '/my-learning',
+        dashboardTitle: 'My Learning',
+        badgeBg: 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800',
+        icon: GraduationCap,
+      };
+    case 'TEACHER':
+    case 'SELLER':
+    case 'COACH':
+      return {
+        label: 'Teacher',
+        dashboardPath: '/teacher/dashboard',
+        dashboardTitle: 'Teacher Studio',
+        badgeBg: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+        icon: Award,
+      };
+    case 'ACADEMY':
+    case 'ACADEMY_ADMIN':
+    case 'BRAND':
+      return {
+        label: 'Academy',
+        dashboardPath: '/academy/dashboard',
+        dashboardTitle: 'Academy Portal',
+        badgeBg: 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+        icon: Building2,
+      };
+    case 'ADMIN':
+      return {
+        label: 'Admin',
+        dashboardPath: '/admin/dashboard',
+        dashboardTitle: 'Admin Console',
+        badgeBg: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800',
+        icon: ShieldCheck,
+      };
+    default:
+      return {
+        label: 'Student',
+        dashboardPath: '/my-learning',
+        dashboardTitle: 'My Learning',
+        badgeBg: 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800',
+        icon: GraduationCap,
+      };
+  }
+};
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -36,7 +86,6 @@ export default function Navbar() {
   const [user, setUser] = useState(() => getCurrentUser(loadState()));
   const [authenticated, setAuthenticated] = useState(() => isUserAuthenticated(loadState()));
   const [notifications, setNotifications] = useState(() => loadState().notifications);
-  const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,11 +104,11 @@ export default function Navbar() {
     return () => window.removeEventListener('ulearn_state_changed', syncState);
   }, []);
 
-  const handleRoleChange = (role: UserRole) => {
-    const updated = switchUser(role);
-    setUser(updated);
-    setShowRoleMenu(false);
-    router.push(getUserRoleDashboard(role));
+  const handleLogout = () => {
+    logoutUser();
+    setUser(getCurrentUser(loadState()));
+    setAuthenticated(false);
+    router.push('/login');
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -142,126 +191,44 @@ export default function Navbar() {
             </form>
           </div>
 
-          {/* Right Action Elements: Role Switcher, Notifications, Theme, User */}
+          {/* Right Action Elements: Role Badge, Role Dashboard, Notifications, Theme, User Profile, Logout */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
 
-            {/* Dedicated Role Login Gateway Button - desktop & tablet */}
-            <Link
-              href="/login"
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-brand-600 dark:hover:text-brand-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-colors shadow-xs"
-              title="Role-Based Authentication Gateway"
-            >
-              <LogIn className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
-              <span>Role Login</span>
-            </Link>
-            
-            {/* RBAC Role Switcher Badge */}
-            <div className="relative">
-              <button
-                onClick={() => setShowRoleMenu(!showRoleMenu)}
-                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-full border border-brand-200 dark:border-brand-800/60 bg-brand-50/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 hover:bg-brand-100 transition-all shadow-sm"
-                title="Switch active role"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-                <span className="hidden md:inline">Role: </span>
-                <span className="text-[11px] sm:text-xs font-bold">{user.role.replace('_', ' ')}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400 shrink-0" />
-              </button>
-
-              {showRoleMenu && (
-                <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-2 z-50">
-                  <div className="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 mb-1">
-                    Select Active Persona (4 Core Roles)
-                  </div>
-                  
-                  <button
-                    onClick={() => handleRoleChange('MEMBER')}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-sm transition-colors ${
-                      user.role === 'MEMBER' || user.role === 'STUDENT' ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <BookOpen className="w-4 h-4 text-blue-600" />
-                    <div>
-                      <div className="font-medium">Member (Alex Morgan)</div>
-                      <div className="text-[11px] text-slate-400">Browse products, enroll, manage orders</div>
+            {authenticated && user ? (
+              <>
+                {/* Static Read-Only Role Badge (Role determined strictly by authenticated account) */}
+                {(() => {
+                  const roleInfo = getRoleInfo(user.role);
+                  const Icon = roleInfo.icon;
+                  return (
+                    <div 
+                      className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold border ${roleInfo.badgeBg}`}
+                      title={`Role: ${roleInfo.label}`}
+                    >
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                      <Icon className="w-3.5 h-3.5 shrink-0 hidden sm:inline" />
+                      <span>{roleInfo.label}</span>
                     </div>
-                  </button>
+                  );
+                })()}
 
-                  <button
-                    onClick={() => handleRoleChange('SELLER')}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-sm transition-colors ${
-                      user.role === 'SELLER' || user.role === 'TEACHER' ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <Layers className="w-4 h-4 text-emerald-600" />
-                    <div>
-                      <div className="font-medium">Seller (Dr. Sarah Chen)</div>
-                      <div className="text-[11px] text-slate-400">Products, orders, revenue, payouts</div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleRoleChange('COACH')}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-sm transition-colors ${
-                      user.role === 'COACH' ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <Video className="w-4 h-4 text-amber-600" />
-                    <div>
-                      <div className="font-medium">Coach (Marcus Vance)</div>
-                      <div className="text-[11px] text-slate-400">1-on-1 coaching, subscriptions, calendar</div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleRoleChange('BRAND')}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-sm transition-colors ${
-                      user.role === 'BRAND' || user.role === 'ACADEMY_ADMIN' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <Sparkles className="w-4 h-4 text-purple-600" />
-                    <div>
-                      <div className="font-medium">Brand (Apex Enterprise)</div>
-                      <div className="text-[11px] text-slate-400">Brand catalog, corporate offerings</div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleRoleChange('ADMIN')}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-sm transition-colors ${
-                      user.role === 'ADMIN' ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <ShieldCheck className="w-4 h-4 text-slate-600 dark:text-slate-300" />
-                    <div>
-                      <div className="font-medium">Admin (Elena Vance)</div>
-                      <div className="text-[11px] text-slate-400">Governance & approvals</div>
-                    </div>
-                  </button>
-
-                  <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs px-2 pb-1">
+                {/* Direct Link to Role Dashboard */}
+                {(() => {
+                  const roleInfo = getRoleInfo(user.role);
+                  const Icon = roleInfo.icon;
+                  return (
                     <Link
-                      href="/register"
-                      onClick={() => setShowRoleMenu(false)}
-                      className="text-brand-600 dark:text-brand-400 font-bold hover:underline"
+                      href={roleInfo.dashboardPath}
+                      className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-xs transition-all"
+                      title={`Open ${roleInfo.dashboardTitle}`}
                     >
-                      + Register Role
+                      <Icon className="w-3.5 h-3.5" />
+                      <span>{roleInfo.dashboardTitle}</span>
                     </Link>
-                    <button
-                      onClick={() => {
-                        logoutUser();
-                        setShowRoleMenu(false);
-                        router.push('/login');
-                      }}
-                      className="text-rose-600 dark:text-rose-400 font-semibold hover:underline flex items-center gap-1"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      <span>Log Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                  );
+                })()}
+              </>
+            ) : null}
 
             {/* Notifications Menu */}
             <div className="relative">
@@ -304,7 +271,7 @@ export default function Navbar() {
               {darkMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            {/* Authenticated Role Portal Button vs Unauthenticated Login/Register */}
+            {/* Authenticated Profile & Logout vs Unauthenticated Sign In & Register */}
             {!authenticated ? (
               <div className="flex items-center gap-1 sm:gap-2">
                 <Link
@@ -321,62 +288,12 @@ export default function Navbar() {
                 </Link>
               </div>
             ) : (
-              <>
-                {(user.role === 'MEMBER' || user.role === 'STUDENT') && (
-                  <Link
-                    href="/dashboard/member"
-                    className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-xs transition-all"
-                  >
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>Member Workspace</span>
-                  </Link>
-                )}
-
-                {(user.role === 'SELLER' || user.role === 'TEACHER') && (
-                  <Link
-                    href="/dashboard/seller"
-                    className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 shadow-xs transition-all"
-                  >
-                    <Layers className="w-3.5 h-3.5" />
-                    <span>Seller Studio</span>
-                  </Link>
-                )}
-
-                {user.role === 'COACH' && (
-                  <Link
-                    href="/dashboard/coach"
-                    className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 shadow-xs transition-all"
-                  >
-                    <Video className="w-3.5 h-3.5" />
-                    <span>Coach Portal</span>
-                  </Link>
-                )}
-
-                {(user.role === 'BRAND' || user.role === 'ACADEMY_ADMIN') && (
-                  <Link
-                    href="/dashboard/brand"
-                    className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-600 text-white hover:bg-purple-700 shadow-xs transition-all"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Brand Portal</span>
-                  </Link>
-                )}
-
-                {user.role === 'ADMIN' && (
-                  <Link
-                    href="/admin/dashboard"
-                    className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs transition-all"
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Platform Admin</span>
-                  </Link>
-                )}
-
+              <div className="flex items-center gap-1 sm:gap-1.5">
                 {/* User Avatar & Profile Link */}
                 <Link
                   href="/profile"
                   className="flex items-center gap-1.5 pl-0.5 sm:pl-1 group shrink-0"
-                  title="View & Edit Role Profile"
+                  title="View & Edit Profile"
                 >
                   <img
                     src={user.avatarUrl}
@@ -387,7 +304,16 @@ export default function Navbar() {
                     {user.name.split(' ')[0]}
                   </span>
                 </Link>
-              </>
+
+                {/* Logout Button */}
+                <button
+                  onClick={handleLogout}
+                  className="p-1.5 sm:p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                  title="Sign out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
             )}
 
             {/* Mobile Menu Trigger */}
@@ -430,7 +356,7 @@ export default function Navbar() {
                   />
                   <div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">{user.name}</div>
-                    <div className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase">{user.role.replace('_', ' ')} Account</div>
+                    <div className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase">{getRoleInfo(user.role).label} Account</div>
                   </div>
                 </div>
                 <button
@@ -543,71 +469,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* 4 Core Role Dashboards */}
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 px-1">
-              Role Workspaces
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <Link 
-                href="/dashboard/member" 
-                onClick={() => setShowMobileMenu(false)}
-                className="p-2.5 rounded-xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold flex items-center gap-2"
-              >
-                <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-                <span>Member Area</span>
-              </Link>
-              <Link 
-                href="/dashboard/seller" 
-                onClick={() => setShowMobileMenu(false)}
-                className="p-2.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-900/40 text-emerald-800 dark:text-emerald-300 font-semibold flex items-center gap-2"
-              >
-                <Layers className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Seller Studio</span>
-              </Link>
-              <Link 
-                href="/dashboard/coach" 
-                onClick={() => setShowMobileMenu(false)}
-                className="p-2.5 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-2"
-              >
-                <Video className="w-3.5 h-3.5 text-amber-600" />
-                <span>Coach Portal</span>
-              </Link>
-              <Link 
-                href="/dashboard/brand" 
-                onClick={() => setShowMobileMenu(false)}
-                className="p-2.5 rounded-xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200/60 dark:border-purple-900/40 text-purple-800 dark:text-purple-300 font-semibold flex items-center gap-2"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                <span>Brand Portal</span>
-              </Link>
-            </div>
-          </div>
 
-          {/* Quick Persona Switcher for Instant Testing on Mobile */}
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 px-1">
-              Switch Active Persona (4 Core Roles)
-            </div>
-            <div className="grid grid-cols-4 gap-1.5">
-              {(['MEMBER', 'SELLER', 'COACH', 'BRAND'] as UserRole[]).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => {
-                    handleRoleChange(r);
-                    setShowMobileMenu(false);
-                  }}
-                  className={`py-2 px-1 rounded-xl text-[11px] font-bold text-center border transition-all ${
-                    user.role === r
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-xs'
-                      : 'bg-slate-50 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
-                  }`}
-                >
-                  {r}
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Theme & Extras */}
           <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
