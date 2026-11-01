@@ -111,7 +111,9 @@ export default function CourseCard({ course, onPreviewClick }: CourseCardProps) 
                 {course.teacher.name}
               </span>
               {course.teacher.verificationStatus === 'VERIFIED' && (
-                <ShieldCheck className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400 shrink-0" title="Verified Instructor" />
+                <span title="Verified Instructor" className="inline-flex items-center">
+                  <ShieldCheck className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400 shrink-0" />
+                </span>
               )}
             </div>
           </div>

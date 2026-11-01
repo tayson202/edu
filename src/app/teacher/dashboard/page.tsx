@@ -67,7 +67,9 @@ export default function TeacherDashboardPage() {
             </div>
             <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
               <span>{user.name}’s Studio</span>
-              <ShieldCheck className="w-6 h-6 text-brand-600 dark:text-brand-400" title="Verified Creator" />
+              <span title="Verified Creator" className="inline-flex items-center">
+                <ShieldCheck className="w-6 h-6 text-brand-600 dark:text-brand-400" />
+              </span>
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Manage your course catalog, track real-time sales ledger, and generate curriculum with AI.

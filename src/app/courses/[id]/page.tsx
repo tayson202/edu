@@ -159,7 +159,9 @@ export default function CourseDetailPage() {
                   <div className="flex items-center gap-1 text-sm font-semibold">
                     <span>Created by {course.teacher.name}</span>
                     {course.teacher.verificationStatus === 'VERIFIED' && (
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" title="Verified Instructor" />
+                      <span title="Verified Instructor" className="inline-flex items-center">
+                        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                      </span>
                     )}
                   </div>
                   <div className="text-xs text-slate-400">{course.teacher.headline}</div>
