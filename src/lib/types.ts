@@ -19,6 +19,52 @@ export type LessonType = 'VIDEO' | 'TEXT' | 'DOCUMENT' | 'QUIZ';
 export type OrderStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
 export type PayoutStatus = 'REQUESTED' | 'PROCESSING' | 'PAID' | 'REJECTED';
 
+export type TeacherWorkingMode = 'INDEPENDENT' | 'ACADEMY_AFFILIATED';
+export type MembershipStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+
+export interface AcademyTeacherPermissions {
+  canCreateCourses: boolean;
+  canEditAcademyCourses: boolean;
+  canViewStudents: boolean;
+  canManageAssignments: boolean;
+  canHostLiveSessions: boolean;
+}
+
+export interface AcademyOpportunity {
+  id: string;
+  academyId: string;
+  title: string;
+  department: string;
+  type: 'FULL_TIME' | 'PART_TIME' | 'ADJUNCT' | 'CONTRACT';
+  location: string;
+  description: string;
+  requirements: string[];
+  compensation?: string;
+}
+
+export interface AcademyMembership {
+  id: string;
+  academyId: string;
+  academyUserId: string;
+  academyName: string;
+  academyLogoUrl?: string;
+  teacherId: string;
+  teacherName: string;
+  teacherEmail: string;
+  teacherAvatarUrl?: string;
+  teacherHeadline?: string;
+  status: MembershipStatus;
+  roleTitle: string;
+  appliedAt: string;
+  reviewedAt?: string;
+  reviewerId?: string;
+  applicationMessage?: string;
+  rejectionReason?: string;
+  permissions: AcademyTeacherPermissions;
+  assignedCourseIds: string[];
+  leftAt?: string;
+}
+
 export interface MemberProfile {
   id: string;
   userId: string;
@@ -75,6 +121,11 @@ export interface AcademyProfile {
   establishedYear: number;
   totalStudents: number;
   verificationStatus: VerificationStatus;
+  departments?: string[];
+  openOpportunities?: AcademyOpportunity[];
+  coverImageUrl?: string;
+  ratingAvg?: number;
+  facultyCount?: number;
 }
 
 export interface AdminProfile {
@@ -130,6 +181,7 @@ export interface TeacherProfile {
   verificationNotes?: string;
   totalEarningsCents: number;
   pendingBalanceCents: number;
+  preferredWorkingMode?: TeacherWorkingMode;
   payoutConfig?: {
     method: 'BANK_TRANSFER' | 'PAYPAL' | 'STRIPE_CONNECT';
     accountDetails: string;
@@ -266,6 +318,8 @@ export interface Course {
   };
   organizationId?: string;
   organizationName?: string;
+  academyId?: string;
+  isAcademyOwned?: boolean;
   categoryId: string;
   categoryName: string;
   title: string;

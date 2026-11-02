@@ -12,7 +12,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 DO $$ 
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
-    CREATE TYPE user_role AS ENUM ('MEMBER', 'SELLER', 'COACH', 'BRAND', 'ADMIN');
+    CREATE TYPE user_role AS ENUM ('MEMBER', 'TEACHER', 'ACADEMY', 'SELLER', 'COACH', 'BRAND', 'ADMIN');
   END IF;
 
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'account_status') THEN
@@ -294,11 +294,13 @@ $$ LANGUAGE sql STABLE SECURITY DEFINER;
 -- PROFILES POLICIES
 -- -------------------------------------------------------------
 -- Anyone can view basic profiles (public directory)
+DROP POLICY IF EXISTS "Public profiles are viewable by everyone" ON public.profiles;
 CREATE POLICY "Public profiles are viewable by everyone"
   ON public.profiles FOR SELECT
   USING (true);
 
 -- Users can only update their own profile (trigger blocks role tampering)
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
 CREATE POLICY "Users can update own profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id)
@@ -308,11 +310,13 @@ CREATE POLICY "Users can update own profile"
 -- PRODUCTS POLICIES (SELLER / BRAND)
 -- -------------------------------------------------------------
 -- Anyone can view published products; Sellers and Brands can view all their own
+DROP POLICY IF EXISTS "Public can view published products" ON public.products;
 CREATE POLICY "Public can view published products"
   ON public.products FOR SELECT
   USING (is_published = true OR auth.uid() = seller_id);
 
 -- Only Sellers, Brands, or Admins can insert products
+DROP POLICY IF EXISTS "Sellers and Brands can insert products" ON public.products;
 CREATE POLICY "Sellers and Brands can insert products"
   ON public.products FOR INSERT
   WITH CHECK (
@@ -321,11 +325,13 @@ CREATE POLICY "Sellers and Brands can insert products"
   );
 
 -- Only the owner can update their products
+DROP POLICY IF EXISTS "Owners can update own products" ON public.products;
 CREATE POLICY "Owners can update own products"
   ON public.products FOR UPDATE
   USING (auth.uid() = seller_id OR public.get_current_role() = 'ADMIN');
 
 -- Only the owner can delete their products
+DROP POLICY IF EXISTS "Owners can delete own products" ON public.products;
 CREATE POLICY "Owners can delete own products"
   ON public.products FOR DELETE
   USING (auth.uid() = seller_id OR public.get_current_role() = 'ADMIN');
@@ -334,11 +340,13 @@ CREATE POLICY "Owners can delete own products"
 -- COACHING PROGRAMS POLICIES (COACH)
 -- -------------------------------------------------------------
 -- Public can view active programs; Coaches can view all their own
+DROP POLICY IF EXISTS "Public can view active coaching programs" ON public.coaching_programs;
 CREATE POLICY "Public can view active coaching programs"
   ON public.coaching_programs FOR SELECT
   USING (is_active = true OR auth.uid() = coach_id);
 
 -- Only Coaches can create programs
+DROP POLICY IF EXISTS "Coaches can insert programs" ON public.coaching_programs;
 CREATE POLICY "Coaches can insert programs"
   ON public.coaching_programs FOR INSERT
   WITH CHECK (
@@ -347,10 +355,12 @@ CREATE POLICY "Coaches can insert programs"
   );
 
 -- Only the owner coach can update/delete
+DROP POLICY IF EXISTS "Coaches can update own programs" ON public.coaching_programs;
 CREATE POLICY "Coaches can update own programs"
   ON public.coaching_programs FOR UPDATE
   USING (auth.uid() = coach_id OR public.get_current_role() = 'ADMIN');
 
+DROP POLICY IF EXISTS "Coaches can delete own programs" ON public.coaching_programs;
 CREATE POLICY "Coaches can delete own programs"
   ON public.coaching_programs FOR DELETE
   USING (auth.uid() = coach_id OR public.get_current_role() = 'ADMIN');
@@ -359,6 +369,7 @@ CREATE POLICY "Coaches can delete own programs"
 -- ORDERS POLICIES (MEMBER, SELLER, COACH, BRAND)
 -- -------------------------------------------------------------
 -- Buyers view their purchases; Merchants view sales on their items; Admins view all
+DROP POLICY IF EXISTS "Users can view their own orders" ON public.orders;
 CREATE POLICY "Users can view their own orders"
   ON public.orders FOR SELECT
   USING (
@@ -368,6 +379,7 @@ CREATE POLICY "Users can view their own orders"
   );
 
 -- Members can place orders
+DROP POLICY IF EXISTS "Authenticated users can create orders" ON public.orders;
 CREATE POLICY "Authenticated users can create orders"
   ON public.orders FOR INSERT
   WITH CHECK (buyer_id = auth.uid());

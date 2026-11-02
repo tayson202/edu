@@ -17,10 +17,12 @@ import {
   Clock, 
   DollarSign, 
   Eye,
-  Check
+  Check,
+  Building2,
+  ShieldAlert
 } from 'lucide-react';
 import { loadState, saveCourse, getCurrentUser } from '@/lib/storage';
-import { Course, CourseSection, Lesson, Category } from '@/lib/types';
+import { Course, CourseSection, Lesson, Category, AcademyMembership } from '@/lib/types';
 import AICourseGeneratorModal from '@/components/ai/AICourseGeneratorModal';
 
 export default function CourseBuilderPage() {
@@ -30,6 +32,8 @@ export default function CourseBuilderPage() {
   const [categories, setCategories] = useState<Category[]>(() => loadState().categories);
   const [showAIGenerator, setShowAIGenerator] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [memberships, setMemberships] = useState<AcademyMembership[]>([]);
+  const [selectedPublishTarget, setSelectedPublishTarget] = useState<'INDEPENDENT' | string>('INDEPENDENT');
 
   // Form States
   const [title, setTitle] = useState('Full-Stack Distributed Systems Masterclass');
@@ -86,8 +90,13 @@ export default function CourseBuilderPage() {
   useEffect(() => {
     setMounted(true);
     const state = loadState();
-    setUser(getCurrentUser(state));
+    const u = getCurrentUser(state);
+    setUser(u);
     setCategories(state.categories);
+    const userMemberships = (state.memberships || []).filter(
+      m => m.teacherId === u.id && m.status === 'APPROVED' && m.permissions.canCreateCourses
+    );
+    setMemberships(userMemberships);
   }, []);
 
   if (!mounted) return null;
@@ -139,18 +148,27 @@ export default function CourseBuilderPage() {
       0
     );
 
+    const isAcademy = selectedPublishTarget !== 'INDEPENDENT';
+    const affiliatedAcademy = isAcademy 
+      ? memberships.find(m => m.id === selectedPublishTarget || m.academyId === selectedPublishTarget || m.academyUserId === selectedPublishTarget)
+      : null;
+
     const newCourse: Course = {
       id: `course-${Date.now()}`,
       teacherId: user.id,
       teacher: {
         id: user.id,
         name: user.name,
-        headline: 'Verified Creator',
+        headline: user.headline || 'Verified Creator',
         avatarUrl: user.avatarUrl,
         ratingAvg: 5.0,
         studentCount: 0,
         verificationStatus: 'VERIFIED',
       },
+      organizationId: affiliatedAcademy ? affiliatedAcademy.academyUserId : undefined,
+      organizationName: affiliatedAcademy ? affiliatedAcademy.academyName : undefined,
+      academyId: affiliatedAcademy ? affiliatedAcademy.academyId : undefined,
+      isAcademyOwned: !!affiliatedAcademy,
       categoryId,
       categoryName,
       title,
@@ -233,6 +251,90 @@ export default function CourseBuilderPage() {
             <span>Course saved and catalog updated successfully! Redirecting to studio...</span>
           </div>
         )}
+
+        {/* 0. OWNERSHIP & PUBLISHING TARGET */}
+        <div className="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-200/80 dark:border-slate-800 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />
+                <span>Course Ownership & Brand Association</span>
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Choose whether this curriculum belongs to your independent brand or is published under an affiliated academy.
+              </p>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              Role: Teacher
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setSelectedPublishTarget('INDEPENDENT')}
+              className={`p-4 rounded-2xl border text-left transition-all ${
+                selectedPublishTarget === 'INDEPENDENT'
+                  ? 'border-brand-600 bg-brand-50/60 dark:bg-brand-950/40 ring-2 ring-brand-500/20'
+                  : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-bold text-xs text-slate-900 dark:text-white">Option A: Independent Course</span>
+                {selectedPublishTarget === 'INDEPENDENT' && (
+                  <span className="w-2 h-2 rounded-full bg-brand-600"></span>
+                )}
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                Published strictly under your personal instructor name. You retain full course ownership, direct student relationship, and independent payouts.
+              </p>
+            </button>
+
+            {memberships.length > 0 ? (
+              memberships.map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => setSelectedPublishTarget(m.id)}
+                  className={`p-4 rounded-2xl border text-left transition-all ${
+                    selectedPublishTarget === m.id
+                      ? 'border-purple-600 bg-purple-50/60 dark:bg-purple-950/40 ring-2 ring-purple-500/20'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-purple-600" />
+                      <span>{m.academyName}</span>
+                    </span>
+                    {selectedPublishTarget === m.id && (
+                      <span className="w-2 h-2 rounded-full bg-purple-600"></span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Published as an authorized academy program. Associated with {m.academyName}’s catalog with your verified faculty credential ({m.roleTitle}).
+                  </p>
+                </button>
+              ))
+            ) : (
+              <div className="p-4 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col justify-center">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Academy Association</span>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Not affiliated with any academy yet. Join an academy to syndicate courses under institutional accreditation.
+                </p>
+                <Link
+                  href="/academies"
+                  className="mt-2 text-[11px] font-bold text-brand-600 dark:text-brand-400 hover:underline"
+                >
+                  Browse Academies & Apply →
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* 1. BASIC DETAILS CARD */}
         <div className="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-200/80 dark:border-slate-800 space-y-5">

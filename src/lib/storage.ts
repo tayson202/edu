@@ -16,7 +16,11 @@ import {
   NotificationItem,
   Quiz,
   QuizAttempt,
-  AssignmentSubmission
+  AssignmentSubmission,
+  TeacherWorkingMode,
+  MembershipStatus,
+  AcademyTeacherPermissions,
+  AcademyMembership
 } from './types';
 import {
   initialCategories,
@@ -31,7 +35,8 @@ import {
   initialReviews,
   initialPlatformSetting,
   initialAuditLogs,
-  initialNotifications
+  initialNotifications,
+  initialMemberships
 } from './seed-data';
 import {
   hashPassword,
@@ -41,7 +46,7 @@ import {
   isValidEmail
 } from './crypto-auth';
 
-const STORAGE_KEY = 'ulearn_state_v3';
+const STORAGE_KEY = 'ulearn_state_v4';
 const CURRENT_USER_KEY = 'ulearn_current_user_id';
 
 export interface AppState {
@@ -62,6 +67,7 @@ export interface AppState {
   settings: PlatformSetting;
   auditLogs: AuditLog[];
   notifications: NotificationItem[];
+  memberships: AcademyMembership[];
 }
 
 function getInitialState(): AppState {
@@ -82,6 +88,7 @@ function getInitialState(): AppState {
     settings: initialPlatformSetting,
     auditLogs: initialAuditLogs,
     notifications: initialNotifications,
+    memberships: initialMemberships,
   };
 }
 
@@ -91,12 +98,15 @@ export function loadState(): AppState {
   }
 
   try {
-    // Clear legacy v1 and v2 state if present to guarantee initial guest mode
+    // Clear legacy state if present
     if (localStorage.getItem('ulearn_state_v1')) {
       try { localStorage.removeItem('ulearn_state_v1'); } catch (e) {}
     }
     if (localStorage.getItem('ulearn_state_v2')) {
       try { localStorage.removeItem('ulearn_state_v2'); } catch (e) {}
+    }
+    if (localStorage.getItem('ulearn_state_v3')) {
+      try { localStorage.removeItem('ulearn_state_v3'); } catch (e) {}
     }
 
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -113,6 +123,18 @@ export function loadState(): AppState {
     for (const initUser of initialUsers) {
       if (!existingIds.has(initUser.id)) {
         combinedState.users.push(initUser);
+      }
+    }
+
+    // Ensure seed memberships are always available
+    if (!combinedState.memberships || combinedState.memberships.length === 0) {
+      combinedState.memberships = initialMemberships;
+    } else {
+      const existingMemIds = new Set(combinedState.memberships.map(m => m.id));
+      for (const initMem of initialMemberships) {
+        if (!existingMemIds.has(initMem.id)) {
+          combinedState.memberships.push(initMem);
+        }
       }
     }
 
@@ -856,4 +878,590 @@ export function updatePlatformCommission(commissionPercent: number): boolean {
 
   saveState(state);
   return true;
+}
+
+// -------------------------------------------------------------
+// TEACHER & ACADEMY RELATIONSHIP ENGINE (RBAC & MEMBERSHIP POLICIES)
+// -------------------------------------------------------------
+
+export function getMemberships(state?: AppState): AcademyMembership[] {
+  const s = state || loadState();
+  return s.memberships || [];
+}
+
+export function getTeacherMemberships(teacherId: string, state?: AppState): AcademyMembership[] {
+  const s = state || loadState();
+  return (s.memberships || []).filter(m => m.teacherId === teacherId);
+}
+
+export function getAcademyMemberships(academyUserIdOrId: string, state?: AppState): AcademyMembership[] {
+  const s = state || loadState();
+  return (s.memberships || []).filter(
+    m => m.academyUserId === academyUserIdOrId || m.academyId === academyUserIdOrId
+  );
+}
+
+export function getAcademies(state?: AppState): User[] {
+  const s = state || loadState();
+  return s.users.filter(u => (u.role === 'ACADEMY' || u.role === 'ACADEMY_ADMIN') && u.academyProfile);
+}
+
+export function getAcademyById(academyIdOrUserId: string, state?: AppState): User | undefined {
+  const s = state || loadState();
+  return s.users.find(
+    u => (u.role === 'ACADEMY' || u.role === 'ACADEMY_ADMIN') &&
+         (u.id === academyIdOrUserId || u.academyProfile?.id === academyIdOrUserId)
+  );
+}
+
+/**
+ * Submits an academy join request from an authenticated teacher.
+ * Backend security checks:
+ * 1. Caller must be an active teacher.
+ * 2. Target must be a valid registered academy.
+ * 3. Prevents self-application (academy cannot apply to itself).
+ * 4. Prevents duplicate active/pending memberships.
+ * 5. Does not alter teacher's global role or independent identity.
+ */
+export function submitAcademyJoinRequest(params: {
+  teacherId: string;
+  academyId: string;
+  applicationMessage?: string;
+  roleTitle?: string;
+}): { success: boolean; membership?: AcademyMembership; error?: string } {
+  const { teacherId, academyId, applicationMessage, roleTitle } = params;
+  const state = loadState();
+
+  const teacher = state.users.find(u => u.id === teacherId);
+  if (!teacher) {
+    return { success: false, error: 'Teacher account not found.' };
+  }
+  const isTeacherRole = teacher.role === 'TEACHER' || teacher.role === 'SELLER' || teacher.role === 'COACH';
+  if (!isTeacherRole) {
+    return { success: false, error: 'Only registered teachers and educators can submit academy join applications.' };
+  }
+
+  const academy = getAcademyById(academyId, state);
+  if (!academy) {
+    return { success: false, error: 'Selected academy does not exist.' };
+  }
+
+  // Prevent self-application
+  if (teacher.id === academy.id) {
+    return { success: false, error: 'An academy cannot submit a teacher application to itself.' };
+  }
+
+  // Duplicate membership checks
+  const existingActive = (state.memberships || []).find(
+    m => m.teacherId === teacher.id &&
+         (m.academyId === academy.academyProfile?.id || m.academyUserId === academy.id) &&
+         (m.status === 'APPROVED' || m.status === 'PENDING')
+  );
+
+  if (existingActive) {
+    if (existingActive.status === 'APPROVED') {
+      return { success: false, error: 'You are already an affiliated teacher with this academy.' };
+    }
+    if (existingActive.status === 'PENDING') {
+      return { success: false, error: 'You already have a pending join application submitted to this academy.' };
+    }
+  }
+
+  const newMembership: AcademyMembership = {
+    id: `mem-${Date.now()}`,
+    academyId: academy.academyProfile?.id || academy.id,
+    academyUserId: academy.id,
+    academyName: academy.academyProfile?.academyName || academy.name,
+    academyLogoUrl: academy.avatarUrl,
+    teacherId: teacher.id,
+    teacherName: teacher.name,
+    teacherEmail: teacher.email,
+    teacherAvatarUrl: teacher.avatarUrl,
+    teacherHeadline: teacher.headline || teacher.teacherProfile?.headline || 'Educator',
+    status: 'PENDING',
+    roleTitle: roleTitle?.trim() || 'Instructor',
+    appliedAt: new Date().toISOString(),
+    applicationMessage: applicationMessage?.trim() || '',
+    permissions: {
+      canCreateCourses: false,
+      canEditAcademyCourses: false,
+      canViewStudents: false,
+      canManageAssignments: false,
+      canHostLiveSessions: false,
+    },
+    assignedCourseIds: [],
+  };
+
+  if (!state.memberships) {
+    state.memberships = [];
+  }
+  state.memberships.unshift(newMembership);
+
+  // Notify Academy Administrator
+  state.notifications.unshift({
+    id: `notif-app-${Date.now()}`,
+    title: 'New Teacher Application Received',
+    message: `${teacher.name} has submitted an application to join ${newMembership.academyName}.`,
+    type: 'INFO',
+    isRead: false,
+    actionUrl: '/academy/dashboard',
+    createdAt: new Date().toISOString(),
+  });
+
+  // Audit Log
+  state.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    actorName: teacher.name,
+    actorRole: teacher.role,
+    action: 'TEACHER_JOIN_REQUEST',
+    resourceType: 'AcademyMembership',
+    resourceId: newMembership.id,
+    details: `Teacher ${teacher.name} applied to join ${newMembership.academyName} as ${newMembership.roleTitle}.`,
+    createdAt: new Date().toISOString(),
+  });
+
+  saveState(state);
+  return { success: true, membership: newMembership };
+}
+
+/**
+ * Reviews a teacher's join application (Approve or Reject).
+ * Backend security checks:
+ * 1. Only the authorized academy administrator or platform ADMIN can approve or reject.
+ * 2. Teachers cannot approve their own requests.
+ * 3. Sets custom permissions on approval.
+ */
+export function reviewAcademyJoinRequest(params: {
+  reviewerUserId: string;
+  membershipId: string;
+  decision: 'APPROVE' | 'REJECT';
+  permissions?: Partial<AcademyTeacherPermissions>;
+  roleTitle?: string;
+  rejectionReason?: string;
+  assignedCourseIds?: string[];
+}): { success: boolean; membership?: AcademyMembership; error?: string } {
+  const { reviewerUserId, membershipId, decision, permissions, roleTitle, rejectionReason, assignedCourseIds } = params;
+  const state = loadState();
+
+  const membership = (state.memberships || []).find(m => m.id === membershipId);
+  if (!membership) {
+    return { success: false, error: 'Membership application not found.' };
+  }
+
+  const reviewer = state.users.find(u => u.id === reviewerUserId);
+  if (!reviewer) {
+    return { success: false, error: 'Reviewer account not found.' };
+  }
+
+  // Security check: must be the academy owner or platform ADMIN
+  const isAcademyOwner = reviewer.id === membership.academyUserId || reviewer.academyProfile?.id === membership.academyId;
+  const isPlatformAdmin = reviewer.role === 'ADMIN';
+  if (!isAcademyOwner && !isPlatformAdmin) {
+    return { success: false, error: 'Unauthorized: Only the designated academy administrator can review faculty applications.' };
+  }
+
+  // Prevent self-approval
+  if (reviewer.id === membership.teacherId) {
+    return { success: false, error: 'Security Violation: Teachers cannot approve their own membership applications.' };
+  }
+
+  if (decision === 'APPROVE') {
+    membership.status = 'APPROVED';
+    membership.reviewedAt = new Date().toISOString();
+    membership.reviewerId = reviewer.id;
+    if (roleTitle?.trim()) {
+      membership.roleTitle = roleTitle.trim();
+    }
+    membership.permissions = {
+      canCreateCourses: true,
+      canEditAcademyCourses: true,
+      canViewStudents: true,
+      canManageAssignments: true,
+      canHostLiveSessions: true,
+      ...(permissions || {}),
+    };
+    if (assignedCourseIds) {
+      membership.assignedCourseIds = assignedCourseIds;
+    }
+
+    // Notify teacher
+    state.notifications.unshift({
+      id: `notif-app-apr-${Date.now()}`,
+      title: 'Academy Application Approved! 🎉',
+      message: `Congratulations! Your request to join ${membership.academyName} has been approved as ${membership.roleTitle}.`,
+      type: 'INFO',
+      isRead: false,
+      actionUrl: '/teacher/dashboard',
+      createdAt: new Date().toISOString(),
+    });
+
+    state.auditLogs.unshift({
+      id: `audit-${Date.now()}`,
+      actorName: reviewer.name,
+      actorRole: reviewer.role,
+      action: 'APPROVE_TEACHER_APPLICATION',
+      resourceType: 'AcademyMembership',
+      resourceId: membership.id,
+      details: `Approved ${membership.teacherName} to join ${membership.academyName}.`,
+      createdAt: new Date().toISOString(),
+    });
+  } else {
+    membership.status = 'REJECTED';
+    membership.reviewedAt = new Date().toISOString();
+    membership.reviewerId = reviewer.id;
+    membership.rejectionReason = rejectionReason || 'Application could not be approved at this time.';
+
+    // Notify teacher
+    state.notifications.unshift({
+      id: `notif-app-rej-${Date.now()}`,
+      title: 'Academy Application Update',
+      message: `Your application to ${membership.academyName} was not accepted: ${membership.rejectionReason}`,
+      type: 'INFO',
+      isRead: false,
+      actionUrl: '/teacher/dashboard',
+      createdAt: new Date().toISOString(),
+    });
+
+    state.auditLogs.unshift({
+      id: `audit-${Date.now()}`,
+      actorName: reviewer.name,
+      actorRole: reviewer.role,
+      action: 'REJECT_TEACHER_APPLICATION',
+      resourceType: 'AcademyMembership',
+      resourceId: membership.id,
+      details: `Declined application of ${membership.teacherName} to join ${membership.academyName}.`,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  saveState(state);
+  return { success: true, membership };
+}
+
+/**
+ * Updates an affiliated teacher's permissions inside the academy.
+ */
+export function updateTeacherPermissions(params: {
+  academyUserId: string;
+  membershipId: string;
+  permissions: Partial<AcademyTeacherPermissions>;
+  roleTitle?: string;
+  assignedCourseIds?: string[];
+}): { success: boolean; membership?: AcademyMembership; error?: string } {
+  const { academyUserId, membershipId, permissions, roleTitle, assignedCourseIds } = params;
+  const state = loadState();
+
+  const membership = (state.memberships || []).find(m => m.id === membershipId);
+  if (!membership) {
+    return { success: false, error: 'Membership record not found.' };
+  }
+
+  const caller = state.users.find(u => u.id === academyUserId);
+  if (!caller || (caller.id !== membership.academyUserId && caller.role !== 'ADMIN')) {
+    return { success: false, error: 'Unauthorized: Only the academy administrator can modify faculty permissions.' };
+  }
+
+  membership.permissions = {
+    ...membership.permissions,
+    ...permissions,
+  };
+  if (roleTitle?.trim()) {
+    membership.roleTitle = roleTitle.trim();
+  }
+  if (assignedCourseIds) {
+    membership.assignedCourseIds = assignedCourseIds;
+  }
+
+  saveState(state);
+  return { success: true, membership };
+}
+
+/**
+ * Removes an affiliated teacher from an academy.
+ * Preserves teacher's user account, profile, and independently owned content!
+ */
+export function removeTeacherFromAcademy(params: {
+  academyUserId: string;
+  membershipId: string;
+  reason?: string;
+}): { success: boolean; error?: string } {
+  const { academyUserId, membershipId, reason } = params;
+  const state = loadState();
+
+  const membership = (state.memberships || []).find(m => m.id === membershipId);
+  if (!membership) {
+    return { success: false, error: 'Membership record not found.' };
+  }
+
+  const caller = state.users.find(u => u.id === academyUserId);
+  if (!caller || (caller.id !== membership.academyUserId && caller.role !== 'ADMIN')) {
+    return { success: false, error: 'Unauthorized: Only the academy administrator can remove affiliated teachers.' };
+  }
+
+  membership.status = 'CANCELLED';
+  membership.leftAt = new Date().toISOString();
+  membership.rejectionReason = reason || 'Removed by academy administration.';
+
+  // Notify teacher
+  state.notifications.unshift({
+    id: `notif-rem-${Date.now()}`,
+    title: 'Academy Affiliation Ended',
+    message: `You are no longer affiliated with ${membership.academyName}. Your personal teacher account and independent courses remain fully intact.`,
+    type: 'INFO',
+    isRead: false,
+    actionUrl: '/teacher/dashboard',
+    createdAt: new Date().toISOString(),
+  });
+
+  state.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    actorName: caller.name,
+    actorRole: caller.role,
+    action: 'REMOVE_TEACHER_FROM_ACADEMY',
+    resourceType: 'AcademyMembership',
+    resourceId: membership.id,
+    details: `Removed ${membership.teacherName} from ${membership.academyName}. Reason: ${reason || 'Admin action'}`,
+    createdAt: new Date().toISOString(),
+  });
+
+  saveState(state);
+  return { success: true };
+}
+
+/**
+ * Allows a teacher to voluntarily leave an academy.
+ * Preserves teacher's user account, profile, and independent courses!
+ */
+export function leaveAcademy(params: {
+  teacherId: string;
+  membershipId: string;
+  reason?: string;
+}): { success: boolean; error?: string } {
+  const { teacherId, membershipId, reason } = params;
+  const state = loadState();
+
+  const membership = (state.memberships || []).find(m => m.id === membershipId);
+  if (!membership) {
+    return { success: false, error: 'Membership record not found.' };
+  }
+
+  if (membership.teacherId !== teacherId) {
+    return { success: false, error: 'Unauthorized: You can only cancel your own academy membership.' };
+  }
+
+  membership.status = 'CANCELLED';
+  membership.leftAt = new Date().toISOString();
+  membership.rejectionReason = reason || 'Teacher resigned membership voluntarily.';
+
+  // Notify academy
+  state.notifications.unshift({
+    id: `notif-left-${Date.now()}`,
+    title: 'Faculty Member Left Academy',
+    message: `${membership.teacherName} has left ${membership.academyName}.`,
+    type: 'INFO',
+    isRead: false,
+    actionUrl: '/academy/dashboard',
+    createdAt: new Date().toISOString(),
+  });
+
+  saveState(state);
+  return { success: true };
+}
+
+/**
+ * Updates a teacher's preferred working mode (Independent vs Academy Affiliated).
+ */
+export function setTeacherWorkingMode(
+  teacherId: string, 
+  mode: TeacherWorkingMode
+): { success: boolean; error?: string } {
+  const state = loadState();
+  const user = state.users.find(u => u.id === teacherId);
+  if (!user || !user.teacherProfile) {
+    return { success: false, error: 'Teacher profile not found.' };
+  }
+
+  user.teacherProfile.preferredWorkingMode = mode;
+  saveState(state);
+  return { success: true };
+}
+
+/**
+ * Validates course permissions & ownership:
+ * - Independent courses belong strictly to their teacher.
+ * - Academy-owned courses belong to the academy and can only be modified by authorized faculty or academy admin.
+ */
+export function canTeacherManageCourse(
+  userId: string,
+  courseId: string,
+  state?: AppState
+): {
+  canEdit: boolean;
+  canDelete: boolean;
+  isOwner: boolean;
+  isAcademyAdmin: boolean;
+  isAffiliatedInstructor: boolean;
+  reason?: string;
+} {
+  const s = state || loadState();
+  const user = s.users.find(u => u.id === userId);
+  const course = s.courses.find(c => c.id === courseId);
+
+  if (!user || !course) {
+    return {
+      canEdit: false,
+      canDelete: false,
+      isOwner: false,
+      isAcademyAdmin: false,
+      isAffiliatedInstructor: false,
+      reason: 'User or course not found.'
+    };
+  }
+
+  // Platform admin can do anything
+  if (user.role === 'ADMIN') {
+    return {
+      canEdit: true,
+      canDelete: true,
+      isOwner: true,
+      isAcademyAdmin: true,
+      isAffiliatedInstructor: true,
+    };
+  }
+
+  // 1. Independent Course
+  if (!course.isAcademyOwned) {
+    if (course.teacherId === user.id) {
+      return {
+        canEdit: true,
+        canDelete: true,
+        isOwner: true,
+        isAcademyAdmin: false,
+        isAffiliatedInstructor: false,
+      };
+    }
+    return {
+      canEdit: false,
+      canDelete: false,
+      isOwner: false,
+      isAcademyAdmin: false,
+      isAffiliatedInstructor: false,
+      reason: 'This course is independently owned by another educator.'
+    };
+  }
+
+  // 2. Academy-Owned Course
+  const isAcademyAdmin = course.organizationId === user.id ||
+    (user.academyProfile && (course.organizationId === user.academyProfile.id || course.academyId === user.academyProfile.id));
+
+  if (isAcademyAdmin) {
+    return {
+      canEdit: true,
+      canDelete: true,
+      isOwner: false,
+      isAcademyAdmin: true,
+      isAffiliatedInstructor: false,
+    };
+  }
+
+  // Check if caller is an approved faculty member in this academy with edit permission
+  const membership = (s.memberships || []).find(
+    m => m.teacherId === user.id &&
+         (m.academyUserId === course.organizationId || m.academyId === course.organizationId) &&
+         m.status === 'APPROVED'
+  );
+
+  if (membership) {
+    const hasEditPermission = membership.permissions.canEditAcademyCourses;
+    const isAssigned = (membership.assignedCourseIds || []).includes(course.id) || course.teacherId === user.id;
+
+    if (hasEditPermission && isAssigned) {
+      return {
+        canEdit: true,
+        canDelete: false, // Affiliated teachers cannot delete academy courses!
+        isOwner: false,
+        isAcademyAdmin: false,
+        isAffiliatedInstructor: true,
+      };
+    }
+
+    return {
+      canEdit: false,
+      canDelete: false,
+      isOwner: false,
+      isAcademyAdmin: false,
+      isAffiliatedInstructor: true,
+      reason: 'You do not have permission from the academy administrator to edit this course.'
+    };
+  }
+
+  return {
+    canEdit: false,
+    canDelete: false,
+    isOwner: false,
+    isAcademyAdmin: false,
+    isAffiliatedInstructor: false,
+    reason: 'This course belongs to an academy you are not affiliated with.'
+  };
+}
+
+/**
+ * Deletes a course after validating strict ownership & authorization.
+ */
+export function deleteCourse(userId: string, courseId: string): { success: boolean; error?: string } {
+  const state = loadState();
+  const perm = canTeacherManageCourse(userId, courseId, state);
+
+  if (!perm.canDelete) {
+    return {
+      success: false,
+      error: perm.reason || 'You are not authorized to delete this course.'
+    };
+  }
+
+  const idx = state.courses.findIndex(c => c.id === courseId);
+  if (idx === -1) {
+    return { success: false, error: 'Course not found.' };
+  }
+
+  const deletedCourse = state.courses[idx];
+  state.courses.splice(idx, 1);
+
+  state.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    actorName: (state.users.find(u => u.id === userId)?.name) || 'User',
+    actorRole: (state.users.find(u => u.id === userId)?.role) || 'TEACHER',
+    action: 'DELETE_COURSE',
+    resourceType: 'Course',
+    resourceId: courseId,
+    details: `Deleted course "${deletedCourse.title}".`,
+    createdAt: new Date().toISOString(),
+  });
+
+  saveState(state);
+  return { success: true };
+}
+
+/**
+ * Updates academy profile details (branding, departments, opportunities, campus, accreditation).
+ */
+export function updateAcademyProfile(
+  academyUserId: string,
+  updates: Partial<NonNullable<User['academyProfile']>>
+): { success: boolean; error?: string } {
+  const state = loadState();
+  const academy = state.users.find(u => u.id === academyUserId);
+
+  if (!academy || !academy.academyProfile) {
+    return { success: false, error: 'Academy profile not found.' };
+  }
+
+  academy.academyProfile = {
+    ...academy.academyProfile,
+    ...updates,
+  };
+  academy.updatedAt = new Date().toISOString();
+
+  saveState(state);
+  return { success: true };
 }

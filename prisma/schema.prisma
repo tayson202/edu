@@ -73,6 +73,18 @@ enum PayoutStatus {
   REJECTED
 }
 
+enum MembershipStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum TeacherWorkingMode {
+  INDEPENDENT
+  ACADEMY_AFFILIATED
+}
+
 model User {
   id              String            @id @default(cuid())
   email           String            @unique
@@ -98,8 +110,9 @@ model User {
   certificates    Certificate[]
   notifications   Notification[]
   aiUsage         AIUsageRecord[]
-  auditLogs       AuditLog[]
-  orgMemberships  OrganizationMember[]
+  auditLogs          AuditLog[]
+  orgMemberships     OrganizationMember[]
+  academyMemberships AcademyMembership[]
 }
 
 model TeacherProfile {
@@ -116,6 +129,7 @@ model TeacherProfile {
   verificationNotes     String?
   totalEarningsCents    Int                @default(0)
   pendingBalanceCents   Int                @default(0)
+  preferredWorkingMode  String             @default("INDEPENDENT")
   payoutConfig          String?            // JSON string with payout preferences
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @updatedAt
@@ -141,17 +155,18 @@ model StudentProfile {
 }
 
 model Organization {
-  id          String               @id @default(cuid())
-  name        String
-  slug        String               @unique
-  logoUrl     String?
-  description String?
-  planTier    String               @default("STARTER") // STARTER, PRO, ENTERPRISE
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  id                 String               @id @default(cuid())
+  name               String
+  slug               String               @unique
+  logoUrl            String?
+  description        String?
+  planTier           String               @default("STARTER") // STARTER, PRO, ENTERPRISE
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
 
-  members     OrganizationMember[]
-  courses     Course[]
+  members            OrganizationMember[]
+  courses            Course[]
+  teacherMemberships AcademyMembership[]
 }
 
 model OrganizationMember {
@@ -164,6 +179,31 @@ model OrganizationMember {
   joinedAt       DateTime     @default(now())
 
   @@unique([organizationId, userId])
+}
+
+model AcademyMembership {
+  id                 String           @id @default(cuid())
+  academyId          String
+  academy            Organization     @relation(fields: [academyId], references: [id], onDelete: Cascade)
+  teacherId          String
+  teacher            User             @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  status             MembershipStatus @default(PENDING)
+  roleTitle          String           @default("Instructor")
+  applicationMessage String?
+  rejectionReason    String?
+  permissions        String?          // JSON: { canCreateCourses, canEditAcademyCourses, canViewStudents, canManageAssignments, canHostLiveSessions }
+  assignedCourseIds  String?          // JSON array of course IDs
+  appliedAt          DateTime         @default(now())
+  reviewedAt         DateTime?
+  reviewerId         String?
+  leftAt             DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@unique([academyId, teacherId])
+  @@index([teacherId])
+  @@index([academyId])
+  @@index([status])
 }
 
 // -------------------------------------------------------------
@@ -200,6 +240,7 @@ model Course {
   priceCents          Int                @default(0)
   discountPriceCents  Int?
   isFree              Boolean            @default(false)
+  isAcademyOwned      Boolean            @default(false)
   status              CourseStatus       @default(DRAFT)
   
   prerequisites       String?            // JSON array of strings

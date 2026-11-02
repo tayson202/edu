@@ -175,6 +175,16 @@ export default function Navbar() {
               >
                 Live Classes
               </Link>
+              <Link 
+                href="/academies" 
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  pathname?.startsWith('/academies') 
+                    ? 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/50' 
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                Academies
+              </Link>
             </nav>
           </div>
 
@@ -450,6 +460,18 @@ export default function Navbar() {
               >
                 <Video className="w-4 h-4 text-emerald-600" />
                 <span>Live Classes</span>
+              </Link>
+              <Link
+                href="/academies"
+                onClick={() => setShowMobileMenu(false)}
+                className={`p-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 border ${
+                  pathname?.startsWith('/academies')
+                    ? 'bg-purple-50 dark:bg-purple-950/60 border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300'
+                    : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-300'
+                }`}
+              >
+                <Building2 className="w-4 h-4 text-purple-600" />
+                <span>Academies</span>
               </Link>
               <Link
                 href="/community"
